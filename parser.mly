@@ -1,18 +1,45 @@
-%{ open Ast %}
+%{
+  open Ast
+%}
 
-%token PLUS MINUS TIMES DIVIDE ASSIGNMENT SEQUENCE EOF
-%token <int> LITERAL
+%token LPAREN RPAREN LBRACKET RBRACKET
+%token COMMA PLUS MINUS TIMES DIVIDE ASSIGN
+%token NOT EQ NEQ LT LEQ GT GEQ AND OR NEG
+%token DEF RETURN IF ELSE ELIF NOELSE FOR WHILE
+%token CONTINUE BREAK IN
+%token INT BOOL CHAR STRING TREE
+%token TRUE FALSE NONE
+%token TAB COLON INDENT DEDENT
+
+%token <int> INT_LITERAL
+%token <bool> BOOL_LITERAL
+%token <string> STRING_LITERAL
+%token <char> CHAR_LITERAL
 %token <string> VARIABLE
+%token EOF
 
-%left SEQUENCE
+%nonassoc NOELSE
+%nonassoc ELSE
 %right ASSIGNMENT
+%left OR
+%left AND
+%left EQ NEQ
+%left LT GT LEQ GEQ
 %left PLUS MINUS
 %left TIMES DIVIDE
+%right NOT NEG
 
-%start expr
-%type <Ast.expr> expr
+%nonassoc LPAREN LBRACKET
+%nonassoc RPAREN RBRACKET
+
+%start program
+%type <Ast.program> program
 
 %%
+
+program:
+  decls EOF { $1 }
+
 
 expr:
   expr PLUS           expr { Binop($1, Add, $3) }
