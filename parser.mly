@@ -2,12 +2,12 @@
   open Ast
 %}
 
-%token LPAREN RPAREN LBRACKET RBRACKET
+%token LPAREN RPAREN LBRACKET RBRACKET SEP
 %token COMMA PLUS MINUS TIMES DIVIDE ASSIGN
 %token NOT EQ NEQ LT LEQ GT GEQ AND OR NEG
-%token DEF RETURN IF ELSE ELIF NOELSE FOR WHILE DOT
+%token DEF RETURN IF ELSE ELIF NOELSE FOR WHILE DOT RANGE
 %token CONTINUE BREAK IN
-%token INT BOOL CHAR STRING TREE
+%token INT BOOL CHAR STRING TREE VOID
 %token TRUE FALSE NONE
 %token TAB COLON INDENT DEDENT
 
@@ -18,10 +18,10 @@
 %token <string> VARIABLE
 %token EOF
 
+// Precedence
 %nonassoc NOELSE
 %nonassoc ELSE
 %right ASSIGN
-%left DOT
 %left OR
 %left AND
 %left EQ NEQ
@@ -29,6 +29,7 @@
 %left PLUS MINUS
 %left TIMES DIVIDE
 %right NOT NEG
+%left DOT
 
 %nonassoc LPAREN LBRACKET
 %nonassoc RPAREN RBRACKET
@@ -39,28 +40,45 @@
 %%
 
 program:
-  stmts EOF { List.rev $1 }
+  stmt_list EOF { List.rev $1 }
 
 stmt_list:
-  | INDENT SEP stmts DEDENT { Statement_List(List.rev $3) }
-
-stmts:
     /* nothing */ { [] }
-  | stmts stmt { $2 :: $1 }
+  | stmt_list stmt { $2 :: $1 }
 
+// TODO: How do we do elif
 stmt:
     expr SEP { Expr $1 }
-  | stmt SEP { $1 }
+  | DEF VARIABLE LPAREN formals_opt RPAREN COLON stmt_block { Func($2, $4, $7) }
+  | RETURN expr_opt SEP { Return $2 }
+  | IF expr COLON stmt_block %prec NOELSE { If($2, $4, Block([])) }
+  | IF expr COLON stmt_block ELSE COLON stmt_block { If($2, $4, $7) }
+  | FOR VARIABLE IN RANGE LPAREN expr RPAREN COLON stmt_block { For($2, $6, $9) }
+  | WHILE expr COLON stmt_block { While($2, $4) }
 
+stmt_block:
+  | INDENT SEP stmt_list DEDENT { Statement_List(List.rev $3) }
 
-
-args_opt:
+formals_opt:
     /* nothing */ { [] }
-  | args_list  { List.rev $1 }
+  | formal_list   { $1 }
 
-args_list:
-    expr                    { [$1] }
-  | args_list COMMA expr    { $3 :: $1 }
+// TODO: Fix this
+formal_list:
+    typ VARIABLE                   { [($1,$2)]     }
+  | formal_list COMMA typ VARIABLE { ($3,$4) :: $1 }
+
+typ:
+    INT     { Int     }
+  | BOOL    { Bool    }
+  | CHAR    { Char    }
+  | VOID    { Void    }
+  | STRING  { String  }
+  | TREE    { Tree    }
+
+expr_opt:
+    /* nothing */ { Noexpr }
+  | expr          { $1 }
 
 expr:
   expr PLUS           expr            { Binop($1, Add, $3)     }
@@ -86,4 +104,12 @@ expr:
 | LBRACKET args_opt RBRACKET          { TreeLit($2)            }
 | LPAREN expr RPAREN                  { $2                     }
 | VARIABLE LPAREN args_opt RPAREN     { Call($1, $3)           } // function call
-| VARIABLE DOT LPAREN args_opt RPAREN { Method($1, $4)         }　// method call on var
+| VARIABLE DOT LPAREN args_opt RPAREN { Method($1, $4)         } // method call on var
+
+args_opt:
+    /* nothing */ { [] }
+  | args_list  { List.rev $1 }
+
+args_list:
+    expr                    { [$1] }
+  | args_list COMMA expr    { $3 :: $1 }
