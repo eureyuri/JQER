@@ -2,13 +2,18 @@
   open Ast
 %}
 
-%token LPAREN RPAREN LBRACKET RBRACKET SEP
+//TODO: NOELSE, VOID, TAB/INDENT/DEDENT
+//TODO: How do we do elif
+//TODO: IN/DEDENT ? Converted from tab
+//TODO: need SEP? 
+
+%token LPAREN RPAREN A RSQUARE SEP
 %token COMMA PLUS MINUS TIMES DIVIDE ASSIGN
 %token NOT EQ NEQ LT LEQ GT GEQ AND OR NEG
 %token DEF RETURN IF ELSE ELIF NOELSE FOR WHILE DOT RANGE
 %token CONTINUE BREAK IN
-%token INT BOOL CHAR STRING TREE
-%token TRUE FALSE NONE
+%token INT BOOL CHAR STRING TREE NONE
+%token TRUE FALSE
 %token TAB COLON INDENT DEDENT
 
 %token <int> INT_LITERAL
@@ -31,8 +36,8 @@
 %right NOT NEG
 %left DOT
 
-%nonassoc LPAREN LBRACKET
-%nonassoc RPAREN RBRACKET
+%nonassoc LPAREN LSQUARE 
+%nonassoc RPAREN RSQUARE
 
 %start program
 %type <Ast.program> program
@@ -46,15 +51,23 @@ stmt_list:
     /* nothing */ { [] }
   | stmt_list stmt { $2 :: $1 }
 
-// TODO: How do we do elif
 stmt:
     expr SEP { Expr $1 }
-  | DEF VARIABLE LPAREN formals_opt RPAREN COLON stmt_block { Func($2, $4, $7) }
+  | typ DEF VARIABLE LPAREN formals_opt RPAREN COLON stmt_block { Func($1, $3, $5, $8) }
   | RETURN expr_opt SEP { Return $2 }
   | IF expr COLON stmt_block %prec NOELSE { If($2, $4, Block([])) }
   | IF expr COLON stmt_block ELSE COLON stmt_block { If($2, $4, $7) }
   | FOR VARIABLE IN RANGE LPAREN expr RPAREN COLON stmt_block { For($2, $6, $9) }
   | WHILE expr COLON stmt_block { While($2, $4) }
+//  | IF expr COLON stmt_block ELIF COLON stmt_block { If($2, $4, $7) }
+
+typ:
+    INT     { Int     }
+  | BOOL    { Bool    }
+  | CHAR    { Char    }
+  | STRING  { String  }
+  | NONE    { None    }
+  | TREE A typ typ typ RSQUARE    { Tree }
 
 stmt_block:
   | INDENT SEP stmt_list DEDENT { Statement_List(List.rev $3) }
@@ -63,18 +76,9 @@ formals_opt:
     /* nothing */ { [] }
   | formal_list   { $1 }
 
-// TODO: Fix this
 formal_list:
     typ VARIABLE                   { [($1,$2)]     }
   | formal_list COMMA typ VARIABLE { ($3,$4) :: $1 }
-
-typ:
-    INT     { Int     }
-  | BOOL    { Bool    }
-  | CHAR    { Char    }
-  | STRING  { String  }
-  | NONE    { None    }
-  | TREE LBRACKET typ typ typ RBRACKET    { Tree }
 
 expr_opt:
     /* nothing */ { Noexpr }
@@ -101,7 +105,8 @@ expr:
 | BOOL_LITERAL                        { BoolLit($1)            }
 | STRING_LITERAL                      { StringLit($1)          }
 | CHAR_LITERAL                        { CharLit($1)            }
-| LBRACKET tree_struct RBRACKET       { Tree($1)               }
+| NONE                                { NONE                   }
+| tree_struct                         { Tree($1)               }
 | LPAREN expr RPAREN                  { $2                     }
 | VARIABLE LPAREN args_opt RPAREN     { Call($1, $3)           } // function call
 | VARIABLE DOT LPAREN args_opt RPAREN { Method($1, $4)         } // method call on var
@@ -114,10 +119,10 @@ args_list:
     expr                    { [$1] }
   | args_list COMMA expr    { $3 :: $1 }
 
+//TODO: refine the tree struct to not break the definition
 tree_struct:
-  /* nothing */ { [] }
-  |  tree_value tree_struct tree_struct   { ($1, $2, $3) }
-  |  LBRACKET tree_value tree_struct tree_struct RBRACKET { ($2, $3, $4) }
+    NONE      { None }
+  |  LSQUARE tree_value tree_struct tree_struct RSQUARE { ($2, $3, $4) }
 
 tree_value:
     INT_LITERAL                     { IntLit($1)             }
