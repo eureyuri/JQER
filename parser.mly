@@ -6,6 +6,7 @@
 //TODO: How do we do elif
 //TODO: IN/DEDENT ? Converted from tab
 //TODO: need SEP? 
+//TODO: more built in? (depth...)
 
 %token LPAREN RPAREN A RSQUARE SEP
 %token COMMA PLUS MINUS TIMES DIVIDE ASSIGN
