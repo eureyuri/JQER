@@ -111,7 +111,7 @@ expr:
 | STRING_LITERAL                      { StringLit($1)          }
 | CHAR_LITERAL                        { CharLit($1)            }
 | NONE                                { NONE                   }
-| tree_struct                         { Tree($1)               }
+// | tree_struct                         { Tree($1)               }
 | LPAREN expr RPAREN                  { $2                     }
 | VARIABLE LPAREN args_opt RPAREN     { Call($1, $3)           } // function call
 
@@ -124,12 +124,15 @@ args_list:
   | args_list COMMA expr    { $3 :: $1 }
 
 //TODO: refine the tree struct to not break the definition
-tree_struct:
-    NONE      { None }
-  |  LSQUARE tree_value tree_struct tree_struct RSQUARE { ($2, $3, $4) }
+// tree_struct:
+//     LSQUARE tree_value tree_struct1 tree_struct1 RSQUARE { ($2, $3, $4) }
 
-tree_value:
-    INT_LITERAL                     { IntLit($1)             }
-  | BOOL_LITERAL                    { BoolLit($1)            }
-  | STRING_LITERAL                  { StringLit($1)          }
-  | CHAR_LITERAL                    { CharLit($1)            }
+// tree_struct1:
+//     NONE      { None }
+//   | expr      { $1 }
+
+// tree_value:
+//     INT_LITERAL                     { IntLit($1)             }
+//   | BOOL_LITERAL                    { BoolLit($1)            }
+//   | STRING_LITERAL                  { StringLit($1)          }
+//   | CHAR_LITERAL                    { CharLit($1)            }
