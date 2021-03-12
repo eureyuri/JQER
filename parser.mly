@@ -2,20 +2,15 @@
   open Ast
 %}
 
-//TODO: NOELSE, VOID, TAB/INDENT/DEDENT
-//TODO: How do we do elif
-//TODO: IN/DEDENT ? Converted from tab
-//TODO: need SEP? 
 //TODO: more built in? (depth...)
 
-%token LPAREN RPAREN LSQAURE RSQUARE SEP
+%token LPAREN RPAREN LSQAURE RSQUARE
 %token COMMA PLUS MINUS TIMES DIVIDE ASSIGN
 %token NOT EQ NEQ LT LEQ GT GEQ AND OR NEG
-%token DEF RETURN IF ELSE ELIF NOELSE FOR WHILE DOT RANGE
-%token CONTINUE BREAK IN
+%token DEF RETURN IF ELSE ELIF NOELSE FOR WHILE DOT RANGE IN
 %token INT BOOL CHAR STRING TREE NONE
 %token TRUE FALSE
-%token TAB COLON INDENT DEDENT
+%token BEGIN END COLON NEWLINE
 
 %token <int> INT_LITERAL
 %token <bool> BOOL_LITERAL
@@ -37,7 +32,7 @@
 %right NOT NEG
 %left DOT
 
-%nonassoc LPAREN LSQUARE 
+%nonassoc LPAREN LSQUARE
 %nonassoc RPAREN RSQUARE
 
 %start program
@@ -53,14 +48,22 @@ stmt_list:
   | stmt_list stmt { $2 :: $1 }
 
 stmt:
-    expr SEP { Expr $1 }
-  | typ DEF VARIABLE LPAREN formals_opt RPAREN COLON stmt_block { Func($1, $3, $5, $8) }
-  | RETURN expr_opt SEP { Return $2 }
-  | IF expr COLON stmt_block %prec NOELSE { If($2, $4, Block([])) }
-  | IF expr COLON stmt_block ELSE COLON stmt_block { If($2, $4, $7) }
-  | FOR VARIABLE IN RANGE LPAREN expr RPAREN COLON stmt_block { For($2, $6, $9) }
-  | WHILE expr COLON stmt_block { While($2, $4) }
-//  | IF expr COLON stmt_block ELIF COLON stmt_block { If($2, $4, $7) }
+    expr NEWLINE { Expr $1 }
+  | typ DEF VARIABLE LPAREN formals_opt RPAREN COLON NEWLINE stmt_block { Func($1, $3, $5, $9) }
+  | RETURN expr_opt NEWLINE { Return $2 }
+  | IF expr COLON NEWLINE stmt_block %prec NOELSE { If($2, $5, Block([])) }
+  | IF expr COLON NEWLINE stmt_block elseif ELSE COLON NEWLINE stmt_block { If($2, $5, $6, $10) }
+  | FOR VARIABLE IN RANGE LPAREN expr RPAREN COLON NEWLINE stmt_block { For($2, $6, $10) }
+  | WHILE expr COLON NEWLINE stmt_block { While($2, $5) }
+
+elseif:
+    { [] }
+  | elseif_list { $1 }
+
+elseif_list:
+    ELIF expr COLON NEWLINE stmt_block { [($2, $5)] }
+  | elseif_list ELIF expr COLON NEWLINE stmt_block { ($3, $6) :: $1 }
+
 
 typ:
     INT     { Int     }
@@ -68,10 +71,11 @@ typ:
   | CHAR    { Char    }
   | STRING  { String  }
   | NONE    { None    }
-  | TREE A typ typ typ RSQUARE    { Tree }
+  | TREE LSQUARE typ typ typ RSQUARE    { Tree }
 
 stmt_block:
-  | INDENT SEP stmt_list DEDENT { Statement_List(List.rev $3) }
+  | BEGIN stmt_list END { Statement_List(List.rev $2) }
+  // TODO: currently we can have a def inside a def
 
 formals_opt:
     /* nothing */ { [] }
@@ -110,7 +114,6 @@ expr:
 | tree_struct                         { Tree($1)               }
 | LPAREN expr RPAREN                  { $2                     }
 | VARIABLE LPAREN args_opt RPAREN     { Call($1, $3)           } // function call
-| VARIABLE DOT LPAREN args_opt RPAREN { Method($1, $4)         } // method call on var
 
 args_opt:
     /* nothing */ { [] }
