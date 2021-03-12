@@ -1,6 +1,6 @@
 parser: parser.mly
-	ocamlyacc parser.mly
+	ocamlyacc -v parser.mly
 
 .PHONY : clean
 clean :
-	rm -rf *.cmi *.cmo parser.ml parser.mli scanner.ml
+	rm -rf *.cmi *.cmo *.output parser.ml parser.mli scanner.ml

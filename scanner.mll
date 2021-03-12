@@ -1,6 +1,3 @@
-(* For matching letters for VARIABLE
-    https://stackoverflow.com/questions/3617797/regex-to-match-only-letters *)
-
 {
   open Lexing
   open Ast
@@ -25,7 +22,7 @@
   let string_buffer = Buffer.create 1024
 
   (* indentation stack *)
-  let stack = ref [0]  
+  let stack = ref [0]
   let rec unindent n = match !stack with
     | m :: _ when m = n -> []
     | m :: st when m > n -> stack := st; END :: unindent n
