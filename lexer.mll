@@ -27,7 +27,7 @@
 let letter = ['a'-'z' 'A'-'Z']
 let digit = ['0'-'9']
 let ident = letter (letter | digit | '_')*
-let integer = ['0'-'9']+
+let integer = digit+
 let space = ' ' | '\t'
 let comment = "#" [^'\n']*
 
@@ -56,8 +56,8 @@ rule next_tokens = parse
   | "def"   { [DEF] }
   | "if"    { [IF] }
   | "else"  { [ELSE] }
-  | "return" { [RETURN] }
-  | "print"  { [PRINT] } 
+  | "return"{ [RETURN] }
+  | "print" { [PRINT] } 
   | "for"   { [FOR] }
   | "in"    { [IN] }
   | "and"   { [AND] }
