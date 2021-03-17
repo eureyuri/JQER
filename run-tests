@@ -10,7 +10,7 @@ for f in tests/good/*.py; do
     echo $f
     expected=tests/good/`basename $f .py`.out
     rm -f out
-    if ./mini-python $f > out; then
+    if ./JQER $f > out; then
       if cmp --quiet out $expected; then
           score=`expr $score + 1`;
       else
@@ -28,7 +28,7 @@ for f in tests/bad/*.py; do
     max=`expr $max + 1`;
     echo $f
     rm -f out
-    if ./mini-python $f > out 2>&1; then
+    if ./JQER $f > out 2>&1; then
 	echo "  FAIL: Evaluation of $f should fail"
     else
         if grep -q "^error:" out; then

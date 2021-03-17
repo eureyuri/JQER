@@ -1,28 +1,16 @@
-
-(* Lexical analyzer for Mini-Python *)
-
 {
   open Lexing
   open Ast
   open Parser
 
+  (*exception to indicate the error is coming from Lexer*)
   exception Lexing_error of string
-
-  let id_or_kwd =
-    let h = Hashtbl.create 32 in
-    List.iter (fun (s, tok) -> Hashtbl.add h s tok)
-      ["def", DEF; "if", IF; "else", ELSE;
-       "return", RETURN; "print", PRINT;
-       "for", FOR; "in", IN;
-       "and", AND; "or", OR; "not", NOT;
-       "True", CST (Cbool true);
-       "False", CST (Cbool false);
-       "None", CST Cnone;];
-   fun s -> try Hashtbl.find h s with Not_found -> IDENT s
-
+  
+  (*the string buffer*)
   let string_buffer = Buffer.create 1024
 
-  let stack = ref [0]  (* indentation stack *)
+  (* indentaion stack *)
+  let stack = ref [0]  
   let rec unindent n = match !stack with
     | m :: _ when m = n -> []
     | m :: st when m > n -> stack := st; END :: unindent n
@@ -47,7 +35,6 @@ rule next_tokens = parse
   | '\n'    { new_line lexbuf; update_stack (indentation lexbuf) }
   | (space | comment)+
             { next_tokens lexbuf }
-  | ident as id { [id_or_kwd id] }
   | '+'     { [PLUS] }
   | '-'     { [MINUS] }
   | '*'     { [TIMES] }
@@ -66,7 +53,20 @@ rule next_tokens = parse
   | ']'     { [RSQ] }
   | ','     { [COMMA] }
   | ':'     { [COLON] }
-  | ''
+  | "def"   { [DEF] }
+  | "if"    { [IF] }
+  | "else"  { [ELSE] }
+  | "return" { [RETURN] }
+  | "print"  { [PRINT] } 
+  | "for"   { [FOR] }
+  | "in"    { [IN] }
+  | "and"   { [AND] }
+  | "or"    { [OR] }
+  | "not"   { [NOT] }
+  | "True"  { [CST (Cbool true)] }
+  | "False" { [CST (Cbool false)] }
+  | "None"  { [CST Cnone] }
+  | ident as id { [IDENT(id)] }
   | integer as s
             { try [CST (Cint (int_of_string s))]
               with _ -> raise (Lexing_error ("constant too large: " ^ s)) }
@@ -98,9 +98,9 @@ and string = parse
       { raise (Lexing_error "unterminated string") }
 
 {
-
+  (* next lexemes to send back *)
   let next_token =
-    let tokens = Queue.create () in (* next lexemes to send back *)
+    let tokens = Queue.create () in 
     fun lb ->
       if Queue.is_empty tokens then begin
 	let l = next_tokens lb in

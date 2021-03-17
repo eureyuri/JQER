@@ -1,5 +1,5 @@
 
-/* Parser for Mini-Python */
+/* Parser for JQER */
 
 %{
   open Ast

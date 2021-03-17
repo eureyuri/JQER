@@ -1,5 +1,5 @@
 
-(* Abstract syntax trees of Mini-Python *)
+(* Abstract syntax trees of JQER *)
 
 type ident = string
 

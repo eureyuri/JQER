@@ -1,11 +1,7 @@
 ast.cmi :
 interp.cmo : \
-    ast.cmi \
-    interp.cmi
+    ast.cmi
 interp.cmx : \
-    ast.cmi \
-    interp.cmi
-interp.cmi : \
     ast.cmi
 lexer.cmo : \
     parser.cmi \
@@ -16,7 +12,7 @@ lexer.cmx : \
 main.cmo : \
     parser.cmi \
     lexer.cmo \
-    interp.cmi
+    interp.cmo
 main.cmx : \
     parser.cmx \
     lexer.cmx \

@@ -2,7 +2,7 @@
 *.cmo
 *.annot
 *.automaton
-mini-python
+JQER
 
 parser.ml
 lexer.ml

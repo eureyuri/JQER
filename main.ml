@@ -5,7 +5,7 @@ open Format
 open Lexing
 open Parser
 
-let usage = "usage: mini-python [options] file.py"
+let usage = "usage: JQER [options] file.py"
 
 let parse_only = ref false
 

@@ -1,15 +1,15 @@
 CMO=lexer.cmo parser.cmo interp.cmo main.cmo
-GENERATED = lexer.ml parser.ml parser.mli
+GENERATED = lexer.ml parser.ml parser.mli parser.conflicts
 FLAGS=-annot -g
 
-all: mini-python
-	./mini-python test.py
+all: JQER
+	./JQER test.py
 
 .PHONY: tests
-tests: mini-python
+tests: JQER
 	bash run-tests
 
-mini-python: $(CMO)
+JQER: $(CMO)
 	ocamlc $(FLAGS) -o $@ nums.cma $(CMO)
 
 .SUFFIXES: .mli .ml .cmi .cmo .mll .mly
@@ -30,7 +30,7 @@ mini-python: $(CMO)
 	menhir -v $<
 
 clean:
-	rm -f *.cm[io] *.o *.annot *~ mini-python $(GENERATED)
+	rm -f *.cm[io] *.o *.annot *~ JQER $(GENERATED)
 	rm -f parser.output parser.automaton
 
 .depend depend:$(GENERATED)

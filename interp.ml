@@ -6,7 +6,7 @@ open Format
 exception Error of string
 let error s = raise (Error s)
 
-(* The values of Mini-Python
+(* The values of JQER
 
    - a noticeable difference with Python: we
       here uses the int type while the Python integers are of
