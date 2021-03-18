@@ -74,12 +74,14 @@ rule next_tokens = parse
   | eof     { [EOF] }
   | _ as c  { raise (Lexing_error ("illegal character: " ^ String.make 1 c)) }
 
+(*update indentaion*)
 and indentation = parse
   | (space | comment)* '\n'
       { new_line lexbuf; indentation lexbuf }
   | space* as s
       { String.length s }
 
+(* string *)
 and string = parse
   | '"'
       { let s = Buffer.contents string_buffer in
