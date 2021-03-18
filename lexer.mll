@@ -5,12 +5,12 @@
 
   (*exception to indicate the error is coming from Lexer*)
   exception Lexing_error of string
-  
+
   (*the string buffer*)
   let string_buffer = Buffer.create 1024
 
   (* indentaion stack *)
-  let stack = ref [0]  
+  let stack = ref [0]
   let rec unindent n = match !stack with
     | m :: _ when m = n -> []
     | m :: st when m > n -> stack := st; END :: unindent n
@@ -39,7 +39,7 @@ rule next_tokens = parse
   | '-'     { [MINUS] }
   | '*'     { [TIMES] }
   | "//"    { [DIV] }
-  | '%'     { [MOD] }
+  (* | '%'     { [MOD] } *)
   | '='     { [EQUAL] }
   | "=="    { [CMP Beq] }
   | "!="    { [CMP Bneq] }
@@ -57,7 +57,7 @@ rule next_tokens = parse
   | "if"    { [IF] }
   | "else"  { [ELSE] }
   | "return"{ [RETURN] }
-  | "print" { [PRINT] } 
+  | "print" { [PRINT] }
   | "for"   { [FOR] }
   | "in"    { [IN] }
   | "and"   { [AND] }
@@ -66,6 +66,9 @@ rule next_tokens = parse
   | "True"  { [CST (Cbool true)] }
   | "False" { [CST (Cbool false)] }
   | "None"  { [CST Cnone] }
+  | "int"    { [INT] }
+  | "bool"   { [BOOL] }
+  | "string"  { [STRING] }
   | ident as id { [IDENT(id)] }
   | integer as s
             { try [CST (Cint (int_of_string s))]
@@ -100,7 +103,7 @@ and string = parse
 {
   (* next lexemes to send back *)
   let next_token =
-    let tokens = Queue.create () in 
+    let tokens = Queue.create () in
     fun lb ->
       if Queue.is_empty tokens then begin
 	let l = next_tokens lb in

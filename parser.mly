@@ -7,11 +7,14 @@
 
 %token <Ast.constant> CST
 %token <Ast.binop> CMP
+// %token <Ast.typ> TYP
 %token <string> IDENT
 %token DEF IF ELSE RETURN PRINT FOR IN AND OR NOT
 %token EOF
 %token LP RP LSQ RSQ COMMA EQUAL COLON BEGIN END NEWLINE
-%token PLUS MINUS TIMES DIV MOD
+%token PLUS MINUS TIMES DIV
+%token INT STRING BOOL
+// %token
 
 /* Priority definitions and associativity of tokens */
 
@@ -38,10 +41,15 @@ file:
 ;
 
 def:
-| DEF f = ident LP x = separated_list(COMMA, ident) RP
+| typ DEF f = ident LP x = separated_list(COMMA, typident) RP
   COLON s = suite
     { f, x, s }
 ;
+
+typ:
+  | INT { Int }
+  | STRING { String }
+  | BOOL { Bool }
 
 expr:
 | c = CST
@@ -58,8 +66,6 @@ expr:
     { Ebinop (o, e1, e2) }
 | f = ident LP e = separated_list(COMMA, expr) RP
     { Ecall (f, e) }
-| LSQ l = separated_list(COMMA, expr) RSQ
-    { Elist l }
 | LP e = expr RP
     { e }
 ;
@@ -100,7 +106,7 @@ simple_stmt:
 | MINUS { Bsub }
 | TIMES { Bmul }
 | DIV   { Bdiv }
-| MOD   { Bmod }
+// | MOD   { Bmod }
 | c=CMP { c    }
 | AND   { Band }
 | OR    { Bor  }
@@ -108,4 +114,8 @@ simple_stmt:
 
 ident:
   id = IDENT { id }
+;
+
+typident:
+  typ ident { $2 }
 ;

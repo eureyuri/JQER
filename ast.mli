@@ -19,6 +19,11 @@ type constant =
   | Cint of int (* in Python the integers are in fact accurate
                    arbitrary; we simplify here *)
 
+type typ =
+  | Int
+  | String
+  | Bool
+
 type expr =
   | Ecst of constant
   | Eident of ident
