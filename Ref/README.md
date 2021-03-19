@@ -13,9 +13,9 @@ interp.ml  | the interpreter (*to be completed*)
 main.ml    | the main program (complete)
 Makefile   | to automate compilation (complete)
 
-As for TD 2, the code provided compiles but is incomplete. The executable is called `JQER` and applies to a **JQER** file with the suffix `.py` , as follows:
+As for TD 2, the code provided compiles but is incomplete. The executable is called `JQER` and applies to a **JQER** file with the suffix `.jqer` , as follows:
 ```shell
-./JQER file.py
+./JQER file.jqer
 ```
 
 A **JQER** file has the following structure:
@@ -56,7 +56,7 @@ whose result must be
 
 Division and Modulo operations must report an error in case of division by zero. To do this, use the `error` function provided in the `interp.ml` file.
 
-To test easily, you can edit the `test.py` file and run the `make` command. This compiles the `JQER` interpreter and launches it on the `test.py` file.
+To test easily, you can edit the `test.jqer` file and run the `make` command. This compiles the `JQER` interpreter and launches it on the `test.jqer` file.
 
 ## Question 2. Boolean and conditional expressions
 Complete the functions `is_true` and `is_false`, which respectively determine whether a value is true or false. In Python, the value `None`, the boolean `False`, the integer `0`, the empty string `""` and the empty list `[]` are considered false and the other values ​​are true.

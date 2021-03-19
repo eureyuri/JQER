@@ -5,10 +5,10 @@ max=0
 
 echo "Positive tests (files in tests/good/)"
 
-for f in tests/good/*.py; do
+for f in tests/good/*.jqer; do
     max=`expr $max + 1`;
     echo $f
-    expected=tests/good/`basename $f .py`.out
+    expected=tests/good/`basename $f .jqer`.out
     rm -f out
     if ./JQER $f > out; then
       if cmp --quiet out $expected; then
@@ -24,7 +24,7 @@ echo
 
 echo "Negative tests (files in tests/bad/)"
 
-for f in tests/bad/*.py; do
+for f in tests/bad/*.jqer; do
     max=`expr $max + 1`;
     echo $f
     rm -f out

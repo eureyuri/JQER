@@ -5,7 +5,7 @@ open Format
 open Lexing
 open Parser
 
-let usage = "usage: JQER [options] file.py"
+let usage = "usage: JQER [options] file.jqer"
 
 let parse_only = ref false
 
@@ -17,8 +17,8 @@ let spec =
 let file =
   let file = ref None in
   let set_file s =
-    if not (Filename.check_suffix s ".py") then
-      raise (Arg.Bad "no .py extension");
+    if not (Filename.check_suffix s ".jqer") then
+      raise (Arg.Bad "no .jqer extension");
     file := Some s
   in
   Arg.parse spec set_file usage;

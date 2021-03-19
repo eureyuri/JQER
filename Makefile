@@ -3,11 +3,11 @@ GENERATED = lexer.ml parser.ml parser.mli parser.conflicts
 FLAGS=-annot -g
 
 all: JQER
-	./JQER test.py
+	./JQER test.jqer
 
 .PHONY: tests
 tests: JQER
-	bash run-tests
+	bash testall.sh
 
 JQER: $(CMO)
 	ocamlc $(FLAGS) -o $@ nums.cma $(CMO)
