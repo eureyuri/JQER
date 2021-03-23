@@ -1,0 +1,10 @@
+def str helloworld(str a):
+  return a;
+end
+
+def str main():
+  str b;
+  b = helloworld("hello");
+  prints(b);
+  return b;
+end

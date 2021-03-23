@@ -1,0 +1,9 @@
+def int main():
+  float a;
+  float b;
+  float c;
+  a = 5.12345678;
+  b = -2.12345;
+  c = a + b;
+  printf(c);
+end

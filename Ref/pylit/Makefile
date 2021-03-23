@@ -5,12 +5,12 @@ test : all testall.sh
 	./testall.sh
 
 .PHONY : all
-all : jqer.native functions.o
+all : pylit.native functions.o
 
-jqer.native :
+pylit.native :
 	opam config exec -- \
 	rm -f *.o
-	ocamlbuild -use-ocamlfind -pkgs llvm.bitreader jqer.native
+	ocamlbuild -use-ocamlfind -pkgs llvm.bitreader pylit.native
 	gcc -c functions.c
 	clang -emit-llvm -o functions.bc -c functions.c -Wno-varargs
 
@@ -19,7 +19,7 @@ jqer.native :
 .PHONY : clean
 clean :
 	ocamlbuild -clean
-	rm -rf testall.log *.diff jqer scanner.ml parser.ml parser.mli
+	rm -rf testall.log *.diff pylit scanner.ml parser.ml parser.mli
 	rm -rf *.cmx *.cmi *.cmo *.cmx *.ll
 	rm -rf *.err *.out *.exe *.s
 	rm -f *.o functions.bc
@@ -46,12 +46,12 @@ FAILS = \
 TESTFILES = $(TESTS:%=test-%.pyl) $(TESTS:%=test-%.out) \
 	    $(FAILS:%=fail-%.pyl) $(FAILS:%=fail-%.err)
 
-TARFILES = ast.ml sast.ml codegen.ml Makefile _tags jqer.ml jqerparse.mly \
+TARFILES = ast.ml sast.ml codegen.ml Makefile _tags pylit.ml pylitparse.mly \
 	README scanner.mll semant.ml testall.sh \
 	functions.c arcade-font.pbm font2c \
 	Dockerfile \
 	$(TESTFILES:%=tests/%)
 
-jqer.tar.gz : $(TARFILES)
-	cd .. && tar czf jqer/jqer.tar.gz \
-		$(TARFILES:%=jqer/%)
+pylit.tar.gz : $(TARFILES)
+	cd .. && tar czf pylit/pylit.tar.gz \
+		$(TARFILES:%=pylit/%)

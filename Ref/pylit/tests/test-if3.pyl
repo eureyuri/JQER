@@ -1,0 +1,6 @@
+def int main():
+  if (false):
+    print(2);
+  end
+  print(17);
+end

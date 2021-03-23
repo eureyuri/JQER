@@ -1,0 +1,9 @@
+def int foo(int a, bool b, int c):
+  end
+
+def none bar(int a, bool b, int a): #Error: duplicate formal a in bar
+  end
+
+def int main():
+  return 0;
+end

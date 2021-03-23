@@ -1,0 +1,6 @@
+def int foo(int a):
+  return a;
+end
+
+def int main():
+end

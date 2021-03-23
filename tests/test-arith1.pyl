@@ -1,0 +1,3 @@
+int def main():
+  print(20 + 5);
+end

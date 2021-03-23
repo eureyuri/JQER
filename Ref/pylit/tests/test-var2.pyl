@@ -1,0 +1,11 @@
+int a;
+
+def none foo(int c):
+  a = 15;
+  a = a + 19;
+end
+
+def int main():
+  foo(73);
+  print(a);
+end

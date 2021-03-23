@@ -1,0 +1,5 @@
+def int main():
+  float a;
+  a = 5.123456789;
+  printf(a);
+end

@@ -1,0 +1,9 @@
+def int main():
+  if (false):
+    print(19);
+  end
+  else:
+    print(8);
+  end
+  print(17);
+end

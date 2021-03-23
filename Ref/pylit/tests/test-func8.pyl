@@ -1,0 +1,7 @@
+def none foo(int a):
+  print(a + 3);
+end
+
+def int main():
+  foo(40);
+end

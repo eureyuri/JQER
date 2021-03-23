@@ -1,0 +1,14 @@
+def int foo():
+  end
+
+def int bar():
+  int a;
+  none b; #Error: illegal none local b
+  bool c;
+
+  return 0;
+end
+
+def int main():
+  return 0;
+end

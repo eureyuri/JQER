@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Regression testing script for JQER
+# Regression testing script for PyLit
 # Step through a list of files
 #  Compile, run, and check the output of each expected-to-work test
 #  Compile and check the error of each expected-to-fail test
@@ -15,10 +15,10 @@ LLC="llc"
 # Path to the C compiler
 CC="cc"
 
-# Path to the JQER compiler.  Usually "./jqer.native"
-# Try "_build/jqer.native" if ocamlbuild was unable to create a symbolic link.
-JQER="./jqer.native"
-#JQER="_build/jqer.native"
+# Path to the PyLit compiler.  Usually "./pylit.native"
+# Try "_build/pylit.native" if ocamlbuild was unable to create a symbolic link.
+PYLIT="./pylit.native"
+#PYLIT="_build/pylit.native"
 
 # Set time limit for all operations
 ulimit -t 30
@@ -92,7 +92,7 @@ Check() {
     generatedfiles=""
 
     generatedfiles="$generatedfiles ${basename}.ll ${basename}.s ${basename}.exe ${basename}.out" &&
-    Run "$JQER" "$1" ">" "${basename}.ll" &&
+    Run "$PYLIT" "$1" ">" "${basename}.ll" &&
     Run "$LLC" "-relocation-model=pic" "${basename}.ll" ">" "${basename}.s" &&
     Run "$CC" "-o" "${basename}.exe" "${basename}.s" "functions.o" &&
     Run "./${basename}.exe" > "${basename}.out" &&
@@ -127,7 +127,7 @@ CheckFail() {
     generatedfiles=""
 
     generatedfiles="$generatedfiles ${basename}.err ${basename}.diff" &&
-    RunFail "$JQER" "<" $1 "2>" "${basename}.err" ">>" $globallog &&
+    RunFail "$PYLIT" "<" $1 "2>" "${basename}.err" ">>" $globallog &&
     Compare ${basename}.err ${reffile}.err ${basename}.diff
 
     # Report the status and clean up the generated files

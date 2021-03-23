@@ -1,0 +1,9 @@
+def int remainder(int a, int b):
+  return a % b;
+end
+
+def int main():
+  int a;
+  a = remainder(38, 3);
+  print(a);
+end
