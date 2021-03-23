@@ -1,3 +1,4 @@
 int def main():
-  prints("hello");
+  print("hello");
+  print(true);
 end

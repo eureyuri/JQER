@@ -6,7 +6,7 @@ open Ast
 
 %token SEMI COLON LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA PLUS MINUS TIMES DIVIDE MODULUS ASSIGN
 %token NOT EQ NEQ LT LEQ GT GEQ AND OR EOL
-%token DEF END RETURN IF ELSE FOR WHILE INT BOOL FLOAT LIST NONE STRING
+%token DEF END RETURN IF ELSE FOR WHILE INT BOOL FLOAT LIST NONE STRING PRINT
 %token <int> LITERAL
 %token <bool> BLIT
 %token <string> ID FLIT STRING_LITERAL
@@ -80,6 +80,7 @@ stmt:
   | FOR LPAREN expr_opt SEMI expr SEMI expr_opt RPAREN stmt
                                             { For($3, $5, $7, $9)   }
   | WHILE LPAREN expr RPAREN stmt           { While($3, $5)         }
+  | PRINT LPAREN expr RPAREN SEMI { Print($3) }
 
 expr_opt:
     /* nothing */ { Noexpr }

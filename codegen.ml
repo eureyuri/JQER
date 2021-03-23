@@ -168,14 +168,6 @@ let translate (globals, functions) =
            A.Neg when t = A.Float -> L.build_fneg
          | A.Neg                  -> L.build_neg
          | A.Not                  -> L.build_not) e' "tmp" builder
-      | SCall ("print", [e]) | SCall ("printb", [e]) ->
-        L.build_call printf_func [| int_format_str ; (expr builder e) |] "printf" builder
-      | SCall ("printbig", [e]) ->
-        L.build_call printbig_func [| (expr builder e) |] "printbig" builder
-      | SCall ("prints", [e]) ->
-        L.build_call printf_func [| string_format_str ; (expr builder e) |] "printf" builder
-      | SCall ("printf", [e]) ->
-        L.build_call printf_func [| float_format_str ; (expr builder e) |] "printf" builder
       | SCall (f, args) ->
         let (fdef, fdecl) = StringMap.find f function_decls in
         let llargs = List.rev (List.map (expr builder) (List.rev args)) in
@@ -223,6 +215,12 @@ let translate (globals, functions) =
         ignore(L.build_cond_br bool_val then_bb else_bb builder);
         L.builder_at_end context merge_bb
 
+      | SPrint e -> let (ty, _) = e in (match ty with
+        | Int | Bool -> L.build_call printf_func [| int_format_str ;
+                  (expr builder e) |] "printf" builder; builder
+        | String -> L.build_call printf_func [| string_format_str ;
+                  (expr builder e) |] "printf" builder; builder
+      )
       | SWhile (predicate, body) ->
         let pred_bb = L.append_block context "while" the_function in
         ignore(L.build_br pred_bb builder);
