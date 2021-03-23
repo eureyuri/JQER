@@ -38,10 +38,11 @@ let check (globals, functions) =
       fname = name;
       formals = [(ty, "x")];
       locals = []; body = [] } map
-    in List.fold_left add_bind StringMap.empty [ ("print", Int);
-			                         ("printb", Bool);
+    in List.fold_left add_bind StringMap.empty [
+                              (* Factored out so it matches normal python print *)
+			                         (* ("printb", Bool); *)
 			                         ("printf", Float);
-                               ("prints", String);
+                               (* ("prints", String); *)
 			                         ("printbig", Int) ]
   in
 
@@ -162,6 +163,7 @@ let check (globals, functions) =
       | For(e1, e2, e3, st) ->
 	  SFor(expr e1, check_bool_expr e2, expr e3, check_stmt st)
       | While(p, s) -> SWhile(check_bool_expr p, check_stmt s)
+      | Print(e) -> SPrint(expr e)
       | Return e -> let (t, e') = expr e in
         if t = func.typ then SReturn (t, e')
         else raise (
