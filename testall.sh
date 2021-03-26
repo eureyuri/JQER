@@ -31,7 +31,7 @@ globalerror=0
 keep=0
 
 Usage() {
-    echo "Usage: testall.sh [options] [.pyl files]"
+    echo "Usage: testall.sh [options] [.jqer files]"
     echo "-k    Keep intermediate files"
     echo "-h    Print this help"
     exit 1
@@ -80,8 +80,8 @@ RunFail() {
 Check() {
     error=0
     basename=`echo $1 | sed 's/.*\\///
-                             s/.pyl//'`
-    reffile=`echo $1 | sed 's/.pyl$//'`
+                             s/.jqer//'`
+    reffile=`echo $1 | sed 's/.jqer$//'`
     basedir="`echo $1 | sed 's/\/[^\/]*$//'`/."
 
     echo -n "$basename..."
@@ -115,8 +115,8 @@ Check() {
 CheckFail() {
     error=0
     basename=`echo $1 | sed 's/.*\\///
-                             s/.pyl//'`
-    reffile=`echo $1 | sed 's/.pyl$//'`
+                             s/.jqer//'`
+    reffile=`echo $1 | sed 's/.jqer$//'`
     basedir="`echo $1 | sed 's/\/[^\/]*$//'`/."
 
     echo -n "$basename..."
@@ -176,7 +176,7 @@ if [ $# -ge 1 ]
 then
     files=$@
 else
-    files="tests/test-*.pyl tests/fail-*.pyl"
+    files="tests/test-*.jqer tests/fail-*.jqer"
 fi
 
 for file in $files

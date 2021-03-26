@@ -43,8 +43,8 @@ FAILS = \
 	return1 return2 while1 while2
 
 
-TESTFILES = $(TESTS:%=test-%.pyl) $(TESTS:%=test-%.out) \
-	    $(FAILS:%=fail-%.pyl) $(FAILS:%=fail-%.err)
+TESTFILES = $(TESTS:%=test-%.jqer) $(TESTS:%=test-%.out) \
+	    $(FAILS:%=fail-%.jqer) $(FAILS:%=fail-%.err)
 
 TARFILES = ast.ml sast.ml codegen.ml Makefile _tags jqer.ml jqerparse.mly \
 	README scanner.mll semant.ml testall.sh \
