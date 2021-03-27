@@ -4,7 +4,7 @@
 
 module L = Llvm
 open Sast
-open Ast
+open! Ast
 
 module StringMap = Map.Make(String)
 

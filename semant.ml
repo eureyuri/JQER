@@ -1,6 +1,6 @@
 (* Semantic checking for the JQER compiler *)
 
-open Ast
+open! Ast
 open Sast
 
 module StringMap = Map.Make(String)
@@ -15,7 +15,7 @@ let check (globals, functions) =
   (* Verify a list of bindings has no none types or duplicate names *)
   let check_binds (kind : string) (binds : bind list) =
     List.iter (function
-	(None, b) -> raise (Failure ("illegal none " ^ kind ^ " " ^ b))
+	(Ast.None, b) -> raise (Failure ("illegal none " ^ kind ^ " " ^ b))
       | _ -> ()) binds;
     let rec dups = function
         [] -> ()
