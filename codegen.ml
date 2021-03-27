@@ -48,10 +48,6 @@ let translate (globals, functions) =
     L.var_arg_function_type i32_t [| L.pointer_type i8_t |] in
   let printf_func : L.llvalue =
     L.declare_function "printf" printf_t the_module in
-
-  let printbig_t : L.lltype =
-    L.function_type i32_t [| i32_t |] in
-
   let string_concat_t : L.lltype =
     L.function_type string_t [| string_t; string_t |] in
   let string_concat_f : L.llvalue =
@@ -77,8 +73,7 @@ let translate (globals, functions) =
     let builder = L.builder_at_end context (L.entry_block the_function) in
 
     let int_format_str = L.build_global_stringptr "%d\n" "fmt" builder
-    and string_format_str = L.build_global_stringptr "%s\n" "fmt" builder
-    and float_format_str = L.build_global_stringptr "%g\n" "fmt" builder in
+    and string_format_str = L.build_global_stringptr "%s\n" "fmt" builder in
 
     (* Construct the function's "locals": formal arguments and locally
        declared variables.  Allocate each on the stack, initialize their
@@ -214,10 +209,13 @@ let translate (globals, functions) =
         L.builder_at_end context merge_bb
 
       | SPrint e -> let (ty, _) = e in (match ty with
-        | Int | Bool -> L.build_call printf_func [| int_format_str ;
-                  (expr builder e) |] "printf" builder; builder
-        | String -> L.build_call printf_func [| string_format_str ;
-                  (expr builder e) |] "printf" builder; builder
+        | Int | Bool -> ignore(L.build_call printf_func [| int_format_str ;
+                  (expr builder e) |] "printf" builder); builder
+        | String -> ignore(L.build_call printf_func [| string_format_str ;
+                  (expr builder e) |] "printf" builder); builder
+        (* TODO: Temporary fix but Should deal with FLoat, None, List *)
+        | _ -> ignore(L.build_call printf_func [| string_format_str ;
+        (expr builder e) |] "printf" builder); builder
       )
       | SWhile (predicate, body) ->
         let pred_bb = L.append_block context "while" the_function in
