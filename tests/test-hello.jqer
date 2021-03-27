@@ -1,4 +1,6 @@
 int def main():
   print("hello");
   print(true);
+  print(true and false);
+  print(true or false);
 end

@@ -1,11 +1,28 @@
 (* Abstract Syntax Tree *)
 
-type op = Add | Sub | Mult | Div | Mod | Equal | Neq | Less | Leq | Greater | Geq |
-          And | Or
+type op = Add
+        | Sub
+        | Mult
+        | Div
+        | Mod
+        | Equal
+        | Neq
+        | Less
+        | Leq
+        | Greater
+        | Geq
+        | And
+        | Or
 
-type uop = Neg | Not
+type uop = Neg
+         | Not
 
-type typ = Int | Bool | Float | None | String | List of typ
+type typ = Int
+         | Bool
+         | Float
+         | None
+         | String
+         | List of typ
 
 type bind = typ * string
 
@@ -55,8 +72,8 @@ let string_of_op = function
   | Leq -> "<="
   | Greater -> ">"
   | Geq -> ">="
-  | And -> "&&"
-  | Or -> "||"
+  | And -> "and"
+  | Or -> "or"
 
 let string_of_uop = function
     Neg -> "-"
