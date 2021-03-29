@@ -50,7 +50,6 @@ rule token = parse
 | "return" { RETURN }
 | "int"    { INT }
 | "bool"   { BOOL }
-| "float"  { FLOAT }
 | "none"   { NONE }
 | "str"    { STRING }
 | "list"   { LIST }
@@ -58,7 +57,6 @@ rule token = parse
 | "false"  { BLIT(false) }
 | "print"  { PRINT }
 | digits as lxm { LITERAL(int_of_string lxm) }
-| digits '.'  digit* ( ['e' 'E'] ['+' '-']? digits )? as lxm { FLIT(lxm) }
 | ['a'-'z' 'A'-'Z']['a'-'z' 'A'-'Z' '0'-'9' '_']*     as lxm { ID(lxm) }
 | string            { STRING_LITERAL( (unescape s) ) }
 | eof { EOF }

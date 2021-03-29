@@ -95,7 +95,6 @@ let check (globals, functions) =
     (* Return a semantically-checked expression, i.e., with a type *)
     let rec expr = function
         Literal  l -> (Int, SLiteral l)
-      | Fliteral l -> (Float, SFliteral l)
       | BoolLit l  -> (Bool, SBoolLit l)
       | Noexpr     -> (None, SNoexpr)
       | StringLit s -> (String, SStringLit s)
@@ -109,7 +108,7 @@ let check (globals, functions) =
       | Unop(op, e) as ex ->
           let (t, e') = expr e in
           let ty = match op with
-            Neg when t = Int || t = Float -> t
+            Neg -> t
           | Not when t = Bool -> Bool
           | _ -> raise (Failure ("illegal unary operator " ^
                                  string_of_uop op ^ string_of_typ t ^
@@ -123,11 +122,10 @@ let check (globals, functions) =
           (* Determine expression type based on operator and operand types *)
           let ty = match op with
               Add | Sub | Mult | Div | Mod when same && t1 = Int   -> Int
-            | Add | Sub | Mult | Div | Mod when same && t1 = Float -> Float
             | Add                          when same && t1 = String -> String
           | Equal | Neq            when same               -> Bool
           | Less | Leq | Greater | Geq
-                     when same && (t1 = Int || t1 = Float) -> Bool
+                     when same -> Bool
           | And | Or when same && t1 = Bool -> Bool
           | _ -> raise (
 	      Failure ("illegal binary operator " ^

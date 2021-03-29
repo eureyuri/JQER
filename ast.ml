@@ -19,7 +19,6 @@ type uop = Neg
 
 type typ = Int
          | Bool
-         | Float
          | None
          | String
          | List of typ
@@ -28,7 +27,6 @@ type bind = typ * string
 
 type expr =
     Literal of int
-  | Fliteral of string
   | BoolLit of bool
   | Id of string
   | StringLit of string
@@ -81,7 +79,6 @@ let string_of_uop = function
 
 let rec string_of_expr = function
     Literal(l) -> string_of_int l
-  | Fliteral(l) -> l
   | StringLit s -> "\"" ^ s ^ "\""
   | BoolLit(true) -> "true"
   | BoolLit(false) -> "false"
@@ -118,7 +115,6 @@ let rec string_of_stmt = function
 let rec string_of_typ = function
     Int -> "int"
   | Bool -> "bool"
-  | Float -> "float"
   | None -> "none"
   | String -> "str"
   | List(t) -> "List(" ^ string_of_typ t ^ ")"
