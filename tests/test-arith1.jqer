@@ -1,3 +1,2 @@
 int def main():
-  print(20 + 5);
-end
+  print(20 + 5)

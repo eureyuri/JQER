@@ -4,9 +4,9 @@
 open! Ast
 %}
 
-%token SEMI COLON LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA PLUS MINUS TIMES DIVIDE MODULUS ASSIGN
+%token COLON LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA PLUS MINUS TIMES DIVIDE MODULUS ASSIGN
 %token NOT EQ NEQ LT LEQ GT GEQ AND OR EOL
-%token DEF END RETURN IF ELSE FOR WHILE INT BOOL LIST NONE STRING PRINT
+%token DEF BEGIN END NEWLINE RETURN IF ELSE FOR WHILE INT BOOL LIST NONE STRING PRINT
 %token <int> LITERAL
 %token <bool> BLIT
 %token <string> ID STRING_LITERAL
@@ -37,12 +37,12 @@ decls:
  | decls fdecl { (fst $1, ($2 :: snd $1)) }
 
 fdecl:
-   typ DEF ID LPAREN formals_opt RPAREN COLON vdecl_list stmt_list END
+   typ DEF ID LPAREN formals_opt RPAREN COLON NEWLINE BEGIN vdecl_list stmt_list END
      { { typ = $1;
 	 fname = $3;
 	 formals = List.rev $5;
-	 locals = List.rev $8;
-	 body = List.rev $9 } }
+	 locals = List.rev $10;
+	 body = List.rev $11 } }
 
 formals_opt:
     /* nothing */ { [] }
@@ -64,22 +64,22 @@ vdecl_list:
   | vdecl_list vdecl { $2 :: $1 }
 
 vdecl:
-   typ ID SEMI { ($1, $2) }
+   typ ID NEWLINE { ($1, $2) }
 
 stmt_list:
     /* nothing */  { [] }
   | stmt_list stmt { $2 :: $1 }
 
 stmt:
-    expr SEMI                               { Expr $1               }
-  | RETURN expr_opt SEMI                    { Return $2             }
-  | COLON stmt_list END                     { Block(List.rev $2)    }
+    expr NEWLINE                              { Expr $1               }
+  | RETURN expr_opt NEWLINE                   { Return $2             }
+  | COLON NEWLINE BEGIN stmt_list END                     { Block(List.rev $4)    }
   | IF LPAREN expr RPAREN stmt %prec NOELSE { If($3, $5, Block([])) }
   | IF LPAREN expr RPAREN stmt ELSE stmt    { If($3, $5, $7)        }
-  | FOR LPAREN expr_opt SEMI expr SEMI expr_opt RPAREN stmt
-                                            { For($3, $5, $7, $9)   }
+  // | FOR LPAREN expr_opt SEMI expr SEMI expr_opt RPAREN stmt
+  //                                           { For($3, $5, $7, $9)   }
   | WHILE LPAREN expr RPAREN stmt           { While($3, $5)         }
-  | PRINT LPAREN expr RPAREN SEMI { Print($3) }
+  | PRINT LPAREN expr RPAREN NEWLINE { Print($3) }
 
 expr_opt:
     /* nothing */ { Noexpr }
