@@ -20,7 +20,6 @@ let translate (globals, functions) =
   let i32_t      = L.i32_type    context
   and i8_t       = L.i8_type     context
   and i1_t       = L.i1_type     context
-  and float_t    = L.double_type context
   and string_t   = L.pointer_type (L.i8_type context)
   and none_t     = L.void_type   context
     in
@@ -29,7 +28,6 @@ let translate (globals, functions) =
   let rec ltype_of_typ = function
       Int   -> i32_t
     | Bool  -> i1_t
-    | Float -> float_t
     | None  -> none_t
     | String -> string_t
     | List(t) -> L.pointer_type (ltype_of_typ t)
@@ -38,9 +36,7 @@ let translate (globals, functions) =
   (* Create a map of global variables after creating each *)
   let global_vars : L.llvalue StringMap.t =
     let global_var m (t, n) =
-      let init = match t with
-          Float -> L.const_float (ltype_of_typ t) 0.0
-        | _ -> L.const_int (ltype_of_typ t) 0
+      let init = L.const_int (ltype_of_typ t) 0
       in StringMap.add n (L.define_global n init the_module) m in
     List.fold_left global_var StringMap.empty globals in
 
@@ -108,29 +104,10 @@ let translate (globals, functions) =
         SLiteral i  -> L.const_int i32_t i
       | SBoolLit b  -> L.const_int i1_t (if b then 1 else 0)
       | SStringLit s -> L.build_global_stringptr s "str" builder
-      | SFliteral l -> L.const_float_of_string float_t l
       | SNoexpr     -> L.const_int i32_t 0
       | SId s       -> L.build_load (lookup s) s builder
       | SAssign (s, e) -> let e' = expr builder e in
         ignore(L.build_store e' (lookup s) builder); e'
-      | SBinop ((Float,_ ) as e1, op, e2) ->
-        let e1' = expr builder e1
-        and e2' = expr builder e2 in
-        (match op with
-           Add     -> L.build_fadd
-         | Sub     -> L.build_fsub
-         | Mult    -> L.build_fmul
-         | Div     -> L.build_fdiv
-         | Mod     -> L.build_frem
-         | Equal   -> L.build_fcmp L.Fcmp.Oeq
-         | Neq     -> L.build_fcmp L.Fcmp.One
-         | Less    -> L.build_fcmp L.Fcmp.Olt
-         | Leq     -> L.build_fcmp L.Fcmp.Ole
-         | Greater -> L.build_fcmp L.Fcmp.Ogt
-         | Geq     -> L.build_fcmp L.Fcmp.Oge
-         | And | Or ->
-           raise (Failure "internal error: semant should have rejected and/or on float")
-        ) e1' e2' "tmp" builder
       | SBinop ((String,_ ) as e1, op, e2) ->
         let e1' = expr builder e1
         and e2' = expr builder e2 in
@@ -155,10 +132,9 @@ let translate (globals, functions) =
          | Greater -> L.build_icmp L.Icmp.Sgt
          | Geq     -> L.build_icmp L.Icmp.Sge
         ) e1' e2' "tmp" builder
-      | SUnop(op, ((t, _) as e)) ->
+      | SUnop(op, ((_, _) as e)) ->
         let e' = expr builder e in
         (match op with
-           Neg when t = Float -> L.build_fneg
          | Neg                  -> L.build_neg
          | Not                  -> L.build_not) e' "tmp" builder
       | SCall (f, args) ->
@@ -243,7 +219,6 @@ let translate (globals, functions) =
     (* Add a return if the last block falls off the end *)
     add_terminal builder (match fdecl.styp with
           None -> L.build_ret_void
-        | Float -> L.build_ret (L.const_float float_t 0.0)
         | t -> L.build_ret (L.const_int (ltype_of_typ t) 0))
   in
 

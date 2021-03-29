@@ -6,10 +6,10 @@ open! Ast
 
 %token SEMI COLON LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA PLUS MINUS TIMES DIVIDE MODULUS ASSIGN
 %token NOT EQ NEQ LT LEQ GT GEQ AND OR EOL
-%token DEF END RETURN IF ELSE FOR WHILE INT BOOL FLOAT LIST NONE STRING PRINT
+%token DEF END RETURN IF ELSE FOR WHILE INT BOOL LIST NONE STRING PRINT
 %token <int> LITERAL
 %token <bool> BLIT
-%token <string> ID FLIT STRING_LITERAL
+%token <string> ID STRING_LITERAL
 %token EOF
 
 %start program
@@ -55,7 +55,6 @@ formal_list:
 typ:
     INT   { Int   }
   | BOOL  { Bool  }
-  | FLOAT { Float }
   | NONE  { None  }
   | STRING { String }
   | LIST LSQUARE typ RSQUARE { List($3) }
@@ -88,7 +87,6 @@ expr_opt:
 
 expr:
     LITERAL          { Literal($1)            }
-  | FLIT	           { Fliteral($1)           }
   | BLIT             { BoolLit($1)            }
   | STRING_LITERAL   { StringLit($1) }
   | ID               { Id($1)                 }

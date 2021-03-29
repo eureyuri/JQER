@@ -5,7 +5,6 @@ open Ast
 type sexpr = typ * sx
 and sx =
     SLiteral of int
-  | SFliteral of string
   | SBoolLit of bool
   | SId of string
   | SStringLit of string
@@ -41,7 +40,6 @@ let rec string_of_sexpr (t, e) =
     SLiteral(l) -> string_of_int l
   | SBoolLit(true) -> "true"
   | SBoolLit(false) -> "false"
-  | SFliteral(l) -> l
   | SStringLit(s) -> s
   | SId(s) -> s
   | SBinop(e1, o, e2) ->
