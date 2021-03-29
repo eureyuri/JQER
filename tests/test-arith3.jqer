@@ -1,10 +1,8 @@
 int def foo(int a):
-  return a;
-end
+  return a
 
 int def main():
-  int a;
-  a = 50;
-  a = a + 5;
-  print(a);
-end
+  int a
+  a = 50
+  a = a + 5
+  print(a)
