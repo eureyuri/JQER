@@ -1,9 +1,7 @@
 str def helloworld(str a):
-  return a;
-end
+  return a
 
 int def main():
-  str b;
-  b = helloworld("hello");
-  print(b);
-end
+  str b
+  b = helloworld("hello")
+  print(b)

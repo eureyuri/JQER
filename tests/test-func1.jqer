@@ -1,9 +1,7 @@
 int def add(int a, int b):
-  return a + b;
-end
+  return a + b
 
 int def main():
-  int a;
-  a = add(7, 2);
-  print(a);
-end
+  int a
+  a = add(7, 2)
+  print(a)

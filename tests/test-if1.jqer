@@ -1,6 +1,4 @@
 int def main():
   if (true):
-    print(19);
-  end
-  print(17);
-end
+    print(19)
+  print(17)

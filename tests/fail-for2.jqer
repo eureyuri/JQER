@@ -1,6 +1,5 @@
 int def main():
-  int i;
+  int i
   for (i = 0; i ; i = i + 1): # i is an integer, not Boolean
-    end
-  return 0;
-end
+
+  return 0

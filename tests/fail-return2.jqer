@@ -1,12 +1,8 @@
 none def foo():
   if (true): #Should return none
-    return 42;
-  end
+    return 42
   else:
-    return;
-  end
-end
+    return
 
 int def main():
-  return 42;
-end
+  return 42

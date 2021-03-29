@@ -1,11 +1,9 @@
-int a;
+int a
 
 none def foo(int c):
-  a = 15;
-  a = a + 19;
-end
+  a = 15
+  a = a + 19
 
 int def main():
-  foo(73);
-  print(a);
-end
+  foo(73)
+  print(a)

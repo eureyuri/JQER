@@ -1,10 +1,5 @@
 int def main():
   if (true):
-    end
   if (false):
-    end
   else:
-    end
   if (42): #Error: non-bool predicate
-    end
-end

@@ -1,12 +1,10 @@
 int def foo(int a, bool b):
-  int c;
-  bool d;
+  int c
+  bool d
 
-  c = a;
+  c = a
 
-  return c + 10;
-end
+  return c + 10
 
 int def main():
- print(foo(37, false));
-end
+ print(foo(37, false))

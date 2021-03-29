@@ -1,5 +1,3 @@
 int def main():
   if (true):
-    foo; #Error: undeclared variable
-  end
-end
+    foo #Error: undeclared variable

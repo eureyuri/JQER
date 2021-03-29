@@ -1,13 +1,11 @@
 int def cond(bool b):
-  int x;
+  int x
   if (b)
-    x = 19;
+    x = 19
   else
-    x = 17;
-  return x;
-end
+    x = 17
+  return x
 
 int def main():
- print(cond(true));
- print(cond(false));
-end
+ print(cond(true))
+ print(cond(false))

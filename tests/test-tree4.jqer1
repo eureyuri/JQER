@@ -1,17 +1,15 @@
 int def main():
-    tree tree1;
-    tree treeleft;
-    tree treeright;
-    int val;
+    tree tree1
+    tree treeleft
+    tree treeright
+    int val
 
-    tree1 = int [2, [1, $, $], [3, $, $]];
+    tree1 = int [2, [1, $, $], [3, $, $]]
 
-    treeleft = left(tree1);
-    treeright = right(tree1);
-    val = value(tree1);
+    treeleft = left(tree1)
+    treeright = right(tree1)
+    val = value(tree1)
 
-    print(treeleft);
-    print(treeright);
-    print(val);
-    
-end
+    print(treeleft)
+    print(treeright)
+    print(val)

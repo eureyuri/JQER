@@ -1,7 +1,5 @@
 int def add(int x, int y):
-  return x + y;
-end
+  return x + y
 
 int def main():
-  print( add(15, 20) );
-end
+  print( add(15, 20) )
