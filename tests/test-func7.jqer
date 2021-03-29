@@ -1,10 +1,8 @@
-int a;
+int a
 
 none def foo(int c):
-  a = c + 35;
-end
+  a = c + 35
 
 int def main():
-  foo(25);
-  print(a);
-end
+  foo(25)
+  print(a)

@@ -1,15 +1,14 @@
-The JQER Compiler:
+# The JQER Compiler
 
-------------------------------
-To run docker image:
+## Setup
+### Running docker image
+`docker run --rm -it -v `pwd`:/home/jqer -w=/home/jqer jqer`
 
-docker run --rm -it -v `pwd`:/home/jqer -w=/home/jqer jqer
+## Running
+`$ make`
 
-------------------------------
-To run and test:
-
-$ make
-
+## Testing
+```
 $ ./testall.sh
 test-arith1...OK
 test-arith2...OK
@@ -18,3 +17,4 @@ test-fib...OK
 ...
 fail-while1...OK
 fail-while2...OK
+```

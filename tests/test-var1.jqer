@@ -1,5 +1,4 @@
 int def main():
-  int a;
-  a = 19;
-  print(a);
-end
+  int a
+  a = 19
+  print(a)

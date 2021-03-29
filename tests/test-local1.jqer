@@ -1,10 +1,8 @@
 none def foo(bool i):
-  int i; #Should hide the formal i
+  int i #Should hide the formal i
 
-  i = 9;
-  print(i + i);
-end
+  i = 9
+  print(i + i)
 
 int def main():
-  foo(true);
-end
+  foo(true)

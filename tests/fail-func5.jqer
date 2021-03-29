@@ -1,14 +1,11 @@
 int def foo():
-  end
 
 int def bar():
-  int a;
-  none b; #Error: illegal none local b
-  bool c;
+  int a
+  none b #Error: illegal none local b
+  bool c
 
-  return 0;
-end
+  return 0
 
 int def main():
-  return 0;
-end
+  return 0

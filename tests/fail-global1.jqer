@@ -1,7 +1,6 @@
-int c;
-bool b;
-none a; #global variables should not be none
+int c
+bool b
+none a #global variables should not be none
 
 int def main():
-  return 0;
-end
+  return 0

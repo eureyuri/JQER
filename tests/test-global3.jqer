@@ -1,9 +1,8 @@
-int i;
-bool b;
-int j;
+int i
+bool b
+int j
 
 int def main():
-  i = 14;
-  j = 10;
-  print(i + j);
-end
+  i = 14
+  j = 10
+  print(i + j)

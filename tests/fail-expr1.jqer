@@ -1,15 +1,13 @@
-int a;
-bool b;
+int a
+bool b
 
 none def foo(int c, bool d):
-  int dd;
-  bool e;
-  a + c;
-  c - a;
-  a * 3;
-  c / 2;
-  d + a; #Error: bool + int
-end
+  int dd
+  bool e
+  a + c
+  c - a
+  a * 3
+  c / 2
+  d + a #Error: bool + int
 
 int def main():
-  end
