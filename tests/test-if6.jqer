@@ -1,0 +1,15 @@
+int def cond(bool b):
+  int x;
+  x = 10;
+  if (b)
+    if (x == 10)
+      x = 19;
+  else
+    x = 17;
+  return x;
+end
+
+int def main():
+ print(cond(true));
+ print(cond(false));
+end

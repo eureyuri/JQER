@@ -1,0 +1,10 @@
+int a;
+
+none def foo(int c):
+  a = c + 35;
+end
+
+int def main():
+  foo(25);
+  print(a);
+end

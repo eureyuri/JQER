@@ -1,0 +1,15 @@
+int def foo():
+  end
+
+int def bar():
+  end
+
+int def baz():
+  end
+
+none def bar(): #Error: duplicate function bar
+  end
+
+int def main():
+  return 0;
+end

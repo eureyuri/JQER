@@ -1,0 +1,5 @@
+int def main():
+  str i;
+  bool b;
+  b = "test string"; #Fail: assigning a string to a bool
+end

@@ -1,0 +1,3 @@
+int def main():
+  return true; #Should return int
+end

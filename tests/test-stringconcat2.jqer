@@ -1,0 +1,7 @@
+int def main():
+  str a;
+  str b;
+  a = "hello!";
+  b = "hello" + " world! " + a;
+  print(b);
+end

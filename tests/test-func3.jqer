@@ -1,0 +1,10 @@
+none def printem(int a, int b, int c, int d):
+  print(a);
+  print(b);
+  print(c);
+  print(d);
+end
+
+int def main():
+  printem(15,17,192,8);
+end

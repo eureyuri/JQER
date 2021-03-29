@@ -1,0 +1,7 @@
+bool i;
+
+int def main():
+  int i; # Should hide the global i
+  i = 28;
+  print(i + i);
+end

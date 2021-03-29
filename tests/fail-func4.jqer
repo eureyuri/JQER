@@ -1,0 +1,15 @@
+int def foo():
+  end
+
+none def bar():
+  end
+
+int def print(): #Should not be able to define print
+  end
+
+none def baz():
+  end
+
+int def main():
+  return 0;
+end

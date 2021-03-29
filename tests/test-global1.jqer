@@ -1,0 +1,25 @@
+int a;
+int b;
+
+none def printa():
+  print(a);
+end
+
+none def printbb():
+  print(b);
+end
+
+none def incab():
+  a = a + 1;
+  b = b + 1;
+end
+
+int def main():
+  a = 30;
+  b = 17;
+  printa();
+  printbb();
+  incab();
+  printa();
+  printbb();
+end

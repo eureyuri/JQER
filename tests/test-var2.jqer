@@ -1,0 +1,11 @@
+int a;
+
+none def foo(int c):
+  a = 15;
+  a = a + 19;
+end
+
+int def main():
+  foo(73);
+  print(a);
+end

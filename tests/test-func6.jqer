@@ -1,0 +1,10 @@
+none def foo():
+  end
+
+int def bar(int a, bool b, int c):
+ return a + c;
+end
+
+int def main():
+  print(bar(4, false, 100));
+end

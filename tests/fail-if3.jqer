@@ -1,0 +1,8 @@
+int def main():
+  if (true):
+    42;
+  end
+  else:
+    bar; #Error: undeclared variable
+  end
+end

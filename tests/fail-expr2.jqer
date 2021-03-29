@@ -1,0 +1,12 @@
+int a;
+bool b;
+
+none def foo(int c, bool d):
+  int d;
+  bool e;
+  b + a; #Error: bool + int
+end
+
+int def main():
+  return 0;
+end
