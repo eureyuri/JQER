@@ -1,10 +1,14 @@
 int def foo():
+  return 1
 
 none def bar():
+  return
 
 int def print(): #Should not be able to define print
+  return 1
 
 none def baz():
+  return
 
 int def main():
   return 0

@@ -1,4 +1,5 @@
 int def foo():
+  return 1
 
 int def bar():
   int a

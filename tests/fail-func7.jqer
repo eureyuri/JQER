@@ -1,4 +1,5 @@
 none def foo(int a, bool b):
+  return
 
 int def main():
   foo(42, true)
