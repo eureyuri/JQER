@@ -51,6 +51,8 @@ rule token = parse
 | "int"    { INT }
 | "bool"   { BOOL }
 | "none"   { NONE }
+| "$"      { TNONE }
+| "tree"   { TREE }
 | "str"    { STRING }
 | "list"   { LIST }
 | "true"   { BLIT(true)  }

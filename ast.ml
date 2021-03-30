@@ -21,6 +21,7 @@ type typ = Int
          | Bool
          | None
          | String
+         | Tree
          | List of typ
 
 type bind = typ * string
@@ -30,6 +31,7 @@ type expr =
   | BoolLit of bool
   | Id of string
   | StringLit of string
+  | TreeLit of expr * expr * expr
   | Binop of expr * op * expr
   | Unop of uop * expr
   | Assign of string * expr
@@ -82,6 +84,7 @@ let rec string_of_expr = function
   | StringLit s -> "\"" ^ s ^ "\""
   | BoolLit(true) -> "true"
   | BoolLit(false) -> "false"
+  | TreeLit(e1, e2, e3) -> "Tree"
   | Id(s) -> s
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2
@@ -117,6 +120,7 @@ let rec string_of_typ = function
   | Bool -> "bool"
   | None -> "none"
   | String -> "str"
+  | Tree -> "tree"
   | List(t) -> "List(" ^ string_of_typ t ^ ")"
 
 let string_of_vdecl (t, id) = string_of_typ t ^ " " ^ id ^ ";\n"

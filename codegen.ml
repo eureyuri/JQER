@@ -30,6 +30,7 @@ let translate (globals, functions) =
     | Bool  -> i1_t
     | None  -> none_t
     | String -> string_t
+    | Tree -> string_t
     | List(t) -> L.pointer_type (ltype_of_typ t)
   in
 
@@ -106,6 +107,10 @@ let translate (globals, functions) =
       | SStringLit s -> L.build_global_stringptr s "str" builder
       | SNoexpr     -> L.const_int i32_t 0
       | SId s       -> L.build_load (lookup s) s builder
+      | STreeLit (e1, e2, e3) -> 
+        let e1' = expr builder e1
+        and e2' = expr builder e2
+        and e3' = expr builder e3 in e1' e2' e3' "tree" builder
       | SAssign (s, e) -> let e' = expr builder e in
         ignore(L.build_store e' (lookup s) builder); e'
       | SBinop ((String,_ ) as e1, op, e2) ->

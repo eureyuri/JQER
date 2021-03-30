@@ -99,7 +99,11 @@ let check (globals, functions) =
       | Noexpr     -> (None, SNoexpr)
       | StringLit s -> (String, SStringLit s)
       | Id s       -> (type_of_identifier s, SId s)
-      | Assign(var, e) as ex ->
+      | TreeLit(e1, e2, e3) as ex ->
+          let (t1, e1') = expr e1
+          and (t2, e2') = expr e2 
+          and (t3, e3') = expr e3 in (Tree, STreeLit((t1, e1'), (t2, e2'), (t3, e3')))
+      | Assign(var, e) as ex -> 
           let lt = type_of_identifier var
           and (rt, e') = expr e in
           let err = "illegal assignment " ^ string_of_typ lt ^ " = " ^

@@ -6,7 +6,7 @@ open! Ast
 
 %token SEMI COLON LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA PLUS MINUS TIMES DIVIDE MODULUS ASSIGN
 %token NOT EQ NEQ LT LEQ GT GEQ AND OR EOL
-%token DEF END RETURN IF ELSE FOR WHILE INT BOOL LIST NONE STRING PRINT
+%token DEF END RETURN IF ELSE FOR WHILE INT BOOL LIST NONE TNONE TREE STRING PRINT
 %token <int> LITERAL
 %token <bool> BLIT
 %token <string> ID STRING_LITERAL
@@ -57,6 +57,7 @@ typ:
   | BOOL  { Bool  }
   | NONE  { None  }
   | STRING { String }
+  | TREE { Tree }
   | LIST LSQUARE typ RSQUARE { List($3) }
 
 vdecl_list:
@@ -90,6 +91,7 @@ expr:
   | BLIT             { BoolLit($1)            }
   | STRING_LITERAL   { StringLit($1) }
   | ID               { Id($1)                 }
+  | TNONE            { Noexpr }
   | expr PLUS   expr { Binop($1, Add,   $3)   }
   | expr MINUS  expr { Binop($1, Sub,   $3)   }
   | expr TIMES  expr { Binop($1, Mult,  $3)   }
@@ -108,6 +110,7 @@ expr:
   | ID ASSIGN expr   { Assign($1, $3)         }
   | ID LPAREN args_opt RPAREN { Call($1, $3)  }
   | LPAREN expr RPAREN { $2                   }
+  | LSQUARE expr COMMA expr COMMA expr RSQUARE { TreeLit($2, $4, $6) }
 
 args_opt:
     /* nothing */ { [] }
