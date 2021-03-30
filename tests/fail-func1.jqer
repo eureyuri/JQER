@@ -1,10 +1,14 @@
 int def foo():
+  return 1
 
 int def bar():
+  return 1
 
 int def baz():
+  return 1
 
 none def bar(): #Error: duplicate function bar
+  return
 
 int def main():
   return 0

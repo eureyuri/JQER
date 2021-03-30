@@ -1,6 +1,8 @@
 int def foo(int a, bool b, int c):
+  return 1
 
 none def bar(int a, none b, int c): #Error: illegal none formal b
+  return
 
 int def main():
   return 0

@@ -1,4 +1,6 @@
 int def foo(int a):
   return a
 
-int def main()
+int def main():
+  int a
+  a = foo(1)

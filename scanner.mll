@@ -59,6 +59,7 @@ rule token = parse
 | "and"     { [AND] }
 | "or"     { [OR] }
 | "!"      { [NOT] }
+| ";"      { [SEMI] }
 | "def"    { [DEF] }
 | "if"     { [IF] }
 | "else"   { [ELSE] }

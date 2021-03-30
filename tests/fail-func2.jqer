@@ -1,6 +1,8 @@
 int def foo(int a, bool b, int c):
+  return 1
 
 none def bar(int a, bool b, int a): #Error: duplicate formal a in bar
+  return
 
 int def main():
   return 0

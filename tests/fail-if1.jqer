@@ -1,5 +1,10 @@
 int def main():
   if (true):
+    print("printing")
   if (false):
+    print("dont print")
   else:
+    print("will not reach")
+
   if (42): #Error: non-bool predicate
+    print("not bool")
