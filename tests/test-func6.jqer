@@ -1,4 +1,5 @@
 none def foo():
+  return
 
 int def bar(int a, bool b, int c):
  return a + c

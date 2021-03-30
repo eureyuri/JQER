@@ -13,4 +13,3 @@ int def main():
   print(!true)
   print(-10)
   print(--19)
-end

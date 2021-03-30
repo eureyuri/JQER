@@ -6,7 +6,7 @@ open! Ast
 
 %token COLON LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA PLUS MINUS TIMES DIVIDE MODULUS ASSIGN
 %token NOT EQ NEQ LT LEQ GT GEQ AND OR EOL
-%token DEF BEGIN END NEWLINE RETURN IF ELSE FOR WHILE INT BOOL LIST NONE STRING PRINT
+%token DEF BEGIN END NEWLINE RETURN IF ELSE FOR WHILE INT BOOL LIST NONE STRING PRINT SEMI
 %token <int> LITERAL
 %token <bool> BLIT
 %token <string> ID STRING_LITERAL
@@ -76,8 +76,8 @@ stmt:
   | COLON NEWLINE BEGIN stmt_list END                     { Block(List.rev $4)    }
   | IF LPAREN expr RPAREN stmt %prec NOELSE { If($3, $5, Block([])) }
   | IF LPAREN expr RPAREN stmt ELSE stmt    { If($3, $5, $7)        }
-  // | FOR LPAREN expr_opt SEMI expr SEMI expr_opt RPAREN stmt
-  //                                           { For($3, $5, $7, $9)   }
+  | FOR LPAREN expr_opt SEMI expr SEMI expr_opt RPAREN stmt
+                                            { For($3, $5, $7, $9)   }
   | WHILE LPAREN expr RPAREN stmt           { While($3, $5)         }
   | PRINT LPAREN expr RPAREN NEWLINE { Print($3) }
 

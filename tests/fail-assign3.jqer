@@ -1,5 +1,7 @@
 none def noneFunc():
+  return
 
 int def main():
   int i
-  i = noneFunc() #Fail: assigning a none to an integer
+  # Fail: assigning a none to an integer
+  i = noneFunc()

@@ -1,8 +1,8 @@
 int def cond(bool b):
   int x
-  if (b)
+  if (b):
     x = 19
-  else
+  else:
     x = 17
   return x
 
