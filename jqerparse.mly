@@ -5,11 +5,12 @@ open! Ast
 %}
 
 %token COLON LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA PLUS MINUS TIMES DIVIDE MODULUS ASSIGN
-%token NOT EQ NEQ LT LEQ GT GEQ AND OR EOL
-%token DEF BEGIN END NEWLINE RETURN IF ELSE FOR WHILE INT BOOL LIST NONE STRING PRINT SEMI
-%token <int> LITERAL
+%token NOT EQ NEQ LT LEQ GT GEQ AND OR EOL DOT
+%token DEF BEGIN END NEWLINE RETURN IF ELSE FOR WHILE INT BOOL LIST TUPLE NONE STRING PRINT SEMI
+%token <int> INT_LITERAL
 %token <bool> BLIT
 %token <string> ID STRING_LITERAL
+%token <int * int> TUPLE_LITERAL 
 %token EOF
 
 %start program
@@ -57,6 +58,7 @@ typ:
   | BOOL  { Bool  }
   | NONE  { None  }
   | STRING { String }
+  | TUPLE { Tuple } 
   | LIST LSQUARE typ RSQUARE { List($3) }
 
 vdecl_list:
@@ -86,7 +88,7 @@ expr_opt:
   | expr          { $1 }
 
 expr:
-    LITERAL          { Literal($1)            }
+    INT_LITERAL          { IntLiteral($1)            }
   | BLIT             { BoolLit($1)            }
   | STRING_LITERAL   { StringLit($1) }
   | ID               { Id($1)                 }
@@ -108,6 +110,8 @@ expr:
   | ID ASSIGN expr   { Assign($1, $3)         }
   | ID LPAREN args_opt RPAREN { Call($1, $3)  }
   | LPAREN expr RPAREN { $2                   }
+  | ID DOT INT_LITERAL  { TupleAccess($1, $3)} 
+  | LPAREN expr COMMA expr RPAREN { TupleLiteral($2,$4) } 
 
 args_opt:
     /* nothing */ { [] }

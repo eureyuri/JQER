@@ -21,20 +21,22 @@ type typ = Int
          | Bool
          | None
          | String
+         | Tuple
          | List of typ
 
 type bind = typ * string
 
 type expr =
-    Literal of int
+    IntLiteral of int
   | BoolLit of bool
+  | TupleAccess of string * int   
+  | TupleLiteral of expr * expr 
   | Id of string
   | StringLit of string
   | Binop of expr * op * expr
   | Unop of uop * expr
   | Assign of string * expr
   | Call of string * expr list
-  (* | Seq of expr list *)
   | Noexpr
 
 type stmt =
@@ -78,10 +80,12 @@ let string_of_uop = function
   | Not -> "!"
 
 let rec string_of_expr = function
-    Literal(l) -> string_of_int l
+    IntLiteral(l) -> string_of_int l
   | StringLit s -> "\"" ^ s ^ "\""
   | BoolLit(true) -> "true"
   | BoolLit(false) -> "false"
+  | TupleLiteral(e1, e2) -> "(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ")"
+  | TupleAccess(s1, s2) -> s1  ^ "." ^ string_of_int s2 
   | Id(s) -> s
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2
@@ -117,6 +121,7 @@ let rec string_of_typ = function
   | Bool -> "bool"
   | None -> "none"
   | String -> "str"
+  | Tuple -> "tuple"
   | List(t) -> "List(" ^ string_of_typ t ^ ")"
 
 let string_of_vdecl (t, id) = string_of_typ t ^ " " ^ id ^ ";\n"

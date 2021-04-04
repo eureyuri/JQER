@@ -94,10 +94,13 @@ let check (globals, functions) =
 
     (* Return a semantically-checked expression, i.e., with a type *)
     let rec expr = function
-        Literal  l -> (Int, SLiteral l)
+        IntLiteral  l -> (Int, SIntLiteral l)
       | BoolLit l  -> (Bool, SBoolLit l)
       | Noexpr     -> (None, SNoexpr)
       | StringLit s -> (String, SStringLit s)
+      | TupleLiteral (x, y) -> let t1 = expr x and t2 = expr y in
+        (Tuple, STupleLiteral (t1, t2))
+      | TupleAccess (s1, s2) ->  (Int, STupleAccess(s1, s2))
       | Id s       -> (type_of_identifier s, SId s)
       | Assign(var, e) as ex ->
           let lt = type_of_identifier var

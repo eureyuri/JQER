@@ -1,0 +1,5 @@
+int def main():
+  tuple t
+  t = (1 , 2)
+  print(t.0)
+  print(t.1)

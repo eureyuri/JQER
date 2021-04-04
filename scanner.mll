@@ -60,6 +60,7 @@ rule token = parse
 | "or"     { [OR] }
 | "!"      { [NOT] }
 | ";"      { [SEMI] }
+| "."      { [DOT] }
 | "def"    { [DEF] }
 | "if"     { [IF] }
 | "else"   { [ELSE] }
@@ -74,7 +75,8 @@ rule token = parse
 | "true"   { [BLIT(true)]  }
 | "false"  { [BLIT(false)] }
 | "print"  { [PRINT] }
-| digits as lxm { [LITERAL(int_of_string lxm)] }
+| "tuple"  { [TUPLE] } 
+| digits as lxm { [INT_LITERAL(int_of_string lxm)] }
 | ident as lxm { [ID(lxm)] }
 | string            { [STRING_LITERAL( (unescape s) )] }
 | eof { [EOF] }
