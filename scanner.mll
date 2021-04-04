@@ -71,7 +71,6 @@ rule token = parse
 | "bool"   { [BOOL] }
 | "none"   { [NONE] }
 | "str"    { [STRING] }
-| "list"   { [LIST] }
 | "true"   { [BLIT(true)]  }
 | "false"  { [BLIT(false)] }
 | "print"  { [PRINT] }

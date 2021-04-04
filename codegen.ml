@@ -34,7 +34,6 @@ let translate (globals, functions) =
     | None  -> none_t
     | String -> string_t
     | Tuple -> tuple_t
-    | List(t) -> L.pointer_type (ltype_of_typ t)
   in
 
   (* Create a map of global variables after creating each *)
@@ -52,9 +51,6 @@ let translate (globals, functions) =
     L.function_type string_t [| string_t; string_t |] in
   let string_concat_f : L.llvalue =
     L.declare_function "string_concat" string_concat_t the_module in
-
-  (* let list_init_t = L.function_type lst_t [||] in
-  let list_init_f = L.declare_function "list_init" list_init_t the_module in *)
 
   (* Define each function (arguments and return type) so we can
      call it even before we've created its body *)

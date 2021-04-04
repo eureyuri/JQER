@@ -22,7 +22,6 @@ type typ = Int
          | None
          | String
          | Tuple
-         | List of typ
 
 type bind = typ * string
 
@@ -95,12 +94,6 @@ let rec string_of_expr = function
     f ^ "(" ^ String.concat ", " (List.map string_of_expr el) ^ ")"
   (* | Seq(a) -> string_of_list a *)
   | Noexpr -> ""
-  and string_of_list = function
-      l -> "[" ^ (string_of_seq l) ^ "]"
-  and string_of_seq = function
-      x :: y :: a -> string_of_expr x ^ ", " ^ string_of_seq (y :: a)
-    | x :: _ -> string_of_expr x
-    | [] -> ""
 
 let rec string_of_stmt = function
     Block(stmts) ->
@@ -122,7 +115,6 @@ let rec string_of_typ = function
   | None -> "none"
   | String -> "str"
   | Tuple -> "tuple"
-  | List(t) -> "List(" ^ string_of_typ t ^ ")"
 
 let string_of_vdecl (t, id) = string_of_typ t ^ " " ^ id ^ ";\n"
 
