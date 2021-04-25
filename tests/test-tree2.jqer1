@@ -1,5 +1,0 @@
-int def main():
-  tree tree1
-
-  tree1 = int [1, $, $]
-  print(tree1)
