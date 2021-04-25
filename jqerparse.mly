@@ -6,11 +6,12 @@ open! Ast
 
 %token COLON LPAREN RPAREN LBRACE RBRACE LSQUARE RSQUARE COMMA PLUS MINUS TIMES DIVIDE MODULUS ASSIGN
 %token NOT EQ NEQ LT LEQ GT GEQ AND OR EOL DOT
-%token DEF BEGIN END NEWLINE RETURN IF ELSE FOR WHILE INT BOOL TUPLE NONE STRING PRINT SEMI
+%token DEF BEGIN END NEWLINE RETURN IF ELSE FOR WHILE INT BOOL CHAR TUPLE NONE STRING PRINT SEMI
 %token <int> INT_LITERAL
+%token <char> CHAR_LITERAL
 %token <bool> BLIT
 %token <string> ID STRING_LITERAL
-%token <int * int> TUPLE_LITERAL 
+%token <int * int> TUPLE_LITERAL
 %token EOF
 
 %start program
@@ -56,9 +57,10 @@ formal_list:
 typ:
     INT   { Int   }
   | BOOL  { Bool  }
+  | CHAR { Char }
   | NONE  { None  }
   | STRING { String }
-  | TUPLE { Tuple } 
+  | TUPLE { Tuple }
 
 vdecl_list:
     /* nothing */    { [] }
@@ -88,6 +90,7 @@ expr_opt:
 
 expr:
     INT_LITERAL          { IntLiteral($1)            }
+  | CHAR_LITERAL          { CharLiteral($1) }
   | BLIT             { BoolLit($1)            }
   | STRING_LITERAL   { StringLit($1) }
   | ID               { Id($1)                 }
@@ -109,8 +112,8 @@ expr:
   | ID ASSIGN expr   { Assign($1, $3)         }
   | ID LPAREN args_opt RPAREN { Call($1, $3)  }
   | LPAREN expr RPAREN { $2                   }
-  | ID DOT INT_LITERAL  { TupleAccess($1, $3)} 
-  | LPAREN expr COMMA expr RPAREN { TupleLiteral($2,$4) } 
+  | ID DOT INT_LITERAL  { TupleAccess($1, $3)}
+  | LPAREN expr COMMA expr RPAREN { TupleLiteral($2,$4) }
 
 args_opt:
     /* nothing */ { [] }

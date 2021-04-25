@@ -5,9 +5,10 @@ open Ast
 type sexpr = typ * sx
 and sx =
     SIntLiteral of int
+  | SCharLiteral of char
   | SBoolLit of bool
-  | STupleLiteral of sexpr * sexpr 
-  | STupleAccess of string * int 
+  | STupleLiteral of sexpr * sexpr
+  | STupleAccess of string * int
   | SId of string
   | SStringLit of string
   | SBinop of sexpr * op * sexpr
@@ -37,14 +38,21 @@ type sprogram = bind list * sfunc_decl list
 
 (* Pretty-printing functions *)
 
+let string_of_bool b = match b with
+  SBoolLit(true) -> "true"
+  | _ -> "false"
+  (* | SBoolLit(false) -> "false" *)
+
 let rec string_of_sexpr (t, e) =
   "(" ^ string_of_typ t ^ " : " ^ (match e with
     SIntLiteral(l) -> string_of_int l
-  | SBoolLit(true) -> "true"
-  | SBoolLit(false) -> "false"
+  | SCharLiteral(l) -> Char.escaped l
+  | SBoolLit(l) -> if l then "true" else "false"
+  (* | SBoolLit(true) -> "true"
+  | SBoolLit(false) -> "false" *)
   | SStringLit(s) -> s
   | STupleLiteral(e1, e2) -> "(" ^ string_of_sexpr e1 ^ ", " ^ string_of_sexpr e2 ^ ")"
-  | STupleAccess(s1, s2) -> s1 ^ "." ^ string_of_int s2 
+  | STupleAccess(s1, s2) -> s1 ^ "." ^ string_of_int s2
   | SId(s) -> s
   | SBinop(e1, o, e2) ->
       string_of_sexpr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_sexpr e2

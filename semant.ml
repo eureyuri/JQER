@@ -95,6 +95,7 @@ let check (globals, functions) =
     (* Return a semantically-checked expression, i.e., with a type *)
     let rec expr = function
         IntLiteral  l -> (Int, SIntLiteral l)
+      | CharLiteral l -> (Char, SCharLiteral l)
       | BoolLit l  -> (Bool, SBoolLit l)
       | Noexpr     -> (None, SNoexpr)
       | StringLit s -> (String, SStringLit s)

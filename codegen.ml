@@ -23,7 +23,7 @@ let translate (globals, functions) =
   and string_t   = L.pointer_type (L.i8_type context)
   and none_t     = L.void_type   context
     in
-  
+
   let tuple_t = L.named_struct_type context "tuple_t" in
     L.struct_set_body tuple_t [| i32_t; i32_t|] false;
 
@@ -31,6 +31,7 @@ let translate (globals, functions) =
   let rec ltype_of_typ = function
       Int   -> i32_t
     | Bool  -> i1_t
+    | Char  -> i8_t
     | None  -> none_t
     | String -> string_t
     | Tuple -> tuple_t
@@ -69,7 +70,10 @@ let translate (globals, functions) =
     let builder = L.builder_at_end context (L.entry_block the_function) in
 
     let int_format_str = L.build_global_stringptr "%d\n" "fmt" builder
-    and string_format_str = L.build_global_stringptr "%s\n" "fmt" builder in
+    and string_format_str = L.build_global_stringptr "%s\n" "fmt" builder
+    (* and true_format_str = L.build_global_stringptr "true\n" "fmt" builder
+    and false_format_str = L.build_global_stringptr "false\n" "fmt" builder *)
+    and char_format_str = L.build_global_stringptr "%c\n" "fmt" builder in
 
     (* Construct the function's "locals": formal arguments and locally
        declared variables.  Allocate each on the stack, initialize their
@@ -102,10 +106,11 @@ let translate (globals, functions) =
     (* Construct code for an expression; return its value *)
     let rec expr builder ((_, e) : sexpr) = match e with
         SIntLiteral i  -> L.const_int i32_t i
+      | SCharLiteral c -> L.const_int i8_t (Char.code c)
       | SBoolLit b  -> L.const_int i1_t (if b then 1 else 0)
       | SStringLit s -> L.build_global_stringptr s "str" builder
       | SNoexpr     -> L.const_int i32_t 0
-      | STupleLiteral (x, y) -> 
+      | STupleLiteral (x, y) ->
         let x' = expr builder x
         and y' = expr builder y in
         let t_ptr = L.build_alloca tuple_t "tmp" builder in
@@ -113,7 +118,7 @@ let translate (globals, functions) =
         ignore (L.build_store x' x_ptr builder);
         let y_ptr = L.build_struct_gep t_ptr 1 "y" builder in
         ignore(L.build_store y' y_ptr builder);
-        L.build_load (t_ptr) "t" builder   
+        L.build_load (t_ptr) "t" builder
       | SId s       -> L.build_load (lookup s) s builder
       | SAssign (s, e) -> let e' = expr builder e in
         ignore(L.build_store e' (lookup s) builder); e'
@@ -146,7 +151,7 @@ let translate (globals, functions) =
         (match op with
          | Neg                  -> L.build_neg
          | Not                  -> L.build_not) e' "tmp" builder
-      | STupleAccess (s1, s2) ->  
+      | STupleAccess (s1, s2) ->
         let t_ptr = (lookup s1) in
         let value_ptr = L.build_struct_gep t_ptr s2 ( "t_ptr") builder in
         L.build_load value_ptr "t_ptr" builder
@@ -200,8 +205,20 @@ let translate (globals, functions) =
       | SPrint e -> let (ty, _) = e in (match ty with
         | Int | Bool -> ignore(L.build_call printf_func [| int_format_str ;
                   (expr builder e) |] "printf" builder); builder
+        (* | Bool -> let ((_, e') : sexpr) = e in (match e' with
+          | SBoolLit b -> if b then (ignore(L.build_call
+            printf_func [| true_format_str ; (expr builder e) |] "printf" builder); builder) else (ignore(L.build_call printf_func [| false_format_str ;
+          (expr builder e) |] "printf" builder); builder)
+          | SIntLiteral i -> if i = 1 then (ignore(L.build_call
+            printf_func [| true_format_str ; (expr builder e) |] "printf" builder); builder) else (ignore(L.build_call printf_func [| false_format_str ;
+          (expr builder e) |] "printf" builder); builder)
+          | _ -> (ignore(L.build_call printf_func [| int_format_str ;
+          (expr builder e) |] "printf" builder); builder)
+        ) *)
         | String -> ignore(L.build_call printf_func [| string_format_str ;
                   (expr builder e) |] "printf" builder); builder
+        | Char -> ignore(L.build_call printf_func [| char_format_str ;
+        (expr builder e) |] "printf" builder); builder
         (* TODO: Temporary fix but Should deal with FLoat, None, List *)
         | _ -> ignore(L.build_call printf_func [| string_format_str ;
         (expr builder e) |] "printf" builder); builder

@@ -1,5 +1,6 @@
 (* Abstract Syntax Tree *)
 
+
 type op = Add
         | Sub
         | Mult
@@ -19,6 +20,7 @@ type uop = Neg
 
 type typ = Int
          | Bool
+         | Char
          | None
          | String
          | Tuple
@@ -27,9 +29,10 @@ type bind = typ * string
 
 type expr =
     IntLiteral of int
+  | CharLiteral of char
   | BoolLit of bool
-  | TupleAccess of string * int   
-  | TupleLiteral of expr * expr 
+  | TupleAccess of string * int
+  | TupleLiteral of expr * expr
   | Id of string
   | StringLit of string
   | Binop of expr * op * expr
@@ -80,11 +83,12 @@ let string_of_uop = function
 
 let rec string_of_expr = function
     IntLiteral(l) -> string_of_int l
+  | CharLiteral(l) -> Char.escaped l
   | StringLit s -> "\"" ^ s ^ "\""
   | BoolLit(true) -> "true"
   | BoolLit(false) -> "false"
   | TupleLiteral(e1, e2) -> "(" ^ string_of_expr e1 ^ ", " ^ string_of_expr e2 ^ ")"
-  | TupleAccess(s1, s2) -> s1  ^ "." ^ string_of_int s2 
+  | TupleAccess(s1, s2) -> s1  ^ "." ^ string_of_int s2
   | Id(s) -> s
   | Binop(e1, o, e2) ->
       string_of_expr e1 ^ " " ^ string_of_op o ^ " " ^ string_of_expr e2
@@ -112,6 +116,7 @@ let rec string_of_stmt = function
 let rec string_of_typ = function
     Int -> "int"
   | Bool -> "bool"
+  | Char -> "char"
   | None -> "none"
   | String -> "str"
   | Tuple -> "tuple"

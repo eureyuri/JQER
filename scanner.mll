@@ -7,6 +7,9 @@
   let unescape s =
       Scanf.sscanf ("\"" ^ s ^ "\"") "%S%!" (fun x -> x)
 
+  let unescape_char s =
+      Scanf.sscanf ("\'" ^ s ^ "\'") "%S%!" (fun x -> String.get x 0)
+
   let stack = ref [0]  (* indentation stack *)
   let rec unindent n = match !stack with
     | m :: _ when m = n -> []
@@ -28,6 +31,7 @@ let digits = digit+
 let ascii = ([' '-'!' '#'-'[' ']'-'~'])
 let escape = '\\' ['\\' ''' '"' 'n' 'r' 't']
 let string = '"' ( (ascii | escape)* as s) '"'
+let char_typ = '\'' letter '\''
 let space = ' ' | '\t'
 let comment = "#" [^'\n']*
 
@@ -68,13 +72,15 @@ rule token = parse
 | "while"  { [WHILE] }
 | "return" { [RETURN] }
 | "int"    { [INT] }
+| "char"   { [CHAR] }
 | "bool"   { [BOOL] }
 | "none"   { [NONE] }
 | "str"    { [STRING] }
 | "true"   { [BLIT(true)]  }
 | "false"  { [BLIT(false)] }
 | "print"  { [PRINT] }
-| "tuple"  { [TUPLE] } 
+| "tuple"  { [TUPLE] }
+| char_typ as lxm {[CHAR_LITERAL(unescape_char lxm)]}
 | digits as lxm { [INT_LITERAL(int_of_string lxm)] }
 | ident as lxm { [ID(lxm)] }
 | string            { [STRING_LITERAL( (unescape s) )] }
