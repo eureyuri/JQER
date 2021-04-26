@@ -1,6 +1,0 @@
-def int main():
-  if (true):
-    print(19);
-  end
-  print(17);
-end

@@ -1,9 +1,0 @@
-def int foo(int a, bool b, int c):
-  end
-
-def none bar(int a, none b, int c): #Error: illegal none formal b
-  end
-
-def int main():
-  return 0;
-end

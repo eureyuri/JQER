@@ -1,8 +1,0 @@
-def str main():
-  str a;
-  str b;
-  a = "hello!";
-  b = "hello" + " world! " + a;
-  prints(b);
-  return b;
-end

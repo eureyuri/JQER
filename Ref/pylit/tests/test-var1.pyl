@@ -1,5 +1,0 @@
-def int main():
-  int a;
-  a = 19;
-  print(a);
-end

@@ -1,7 +1,0 @@
-int c;
-bool b;
-none a; #global variables should not be none
-
-def int main():
-  return 0;
-end

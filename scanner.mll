@@ -7,6 +7,7 @@
   let unescape s =
       Scanf.sscanf ("\"" ^ s ^ "\"") "%S%!" (fun x -> x)
 
+(* Referenced for using stack: https://github.com/LibAssignment/INF564-assignment2 *)
   let stack = ref [0]  (* indentation stack *)
   let rec unindent n = match !stack with
     | m :: _ when m = n -> []
@@ -74,7 +75,7 @@ rule token = parse
 | "true"   { [BLIT(true)]  }
 | "false"  { [BLIT(false)] }
 | "print"  { [PRINT] }
-| "tuple"  { [TUPLE] } 
+| "tuple"  { [TUPLE] }
 | digits as lxm { [INT_LITERAL(int_of_string lxm)] }
 | ident as lxm { [ID(lxm)] }
 | string            { [STRING_LITERAL( (unescape s) )] }
@@ -94,7 +95,7 @@ and indentation = parse
 
 {
   let next_token =
-    let tokens = Queue.create () in (* next lexemes to send back *)
+    let tokens = Queue.create () in
     fun lb ->
       if Queue.is_empty tokens then begin
 	let l = token lb in

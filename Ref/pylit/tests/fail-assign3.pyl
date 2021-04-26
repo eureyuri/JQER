@@ -1,7 +1,0 @@
-def none noneFunc():
-  end
-
-def int main():
-  int i;
-  i = noneFunc(); #Fail: assigning a none to an integer
-end

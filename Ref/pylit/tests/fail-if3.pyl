@@ -1,8 +1,0 @@
-def int main():
-  if (true):
-    42;
-  end
-  else:
-    bar; #Error: undeclared variable
-  end
-end

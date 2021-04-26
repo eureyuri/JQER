@@ -1,3 +1,0 @@
-def none main():
-  prints("Hello World!");
-end
