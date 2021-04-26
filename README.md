@@ -43,6 +43,6 @@ int def main():
   print(hello)
 ```
 
-Output
-9
+**Output** <br>
+9 <br>
 Hello, world!
